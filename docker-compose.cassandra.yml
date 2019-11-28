@@ -39,17 +39,8 @@ services:
     - "9042"
     volumes:
       - ./tb-node/cassandra:/var/lib/cassandra
-  tb1:
+  tbpe:
     env_file:
       - tb-node.cassandra.env
     depends_on:
-      - kafka
-      - redis
-      - cassandra
-  tb2:
-    env_file:
-      - tb-node.cassandra.env
-    depends_on:
-      - kafka
-      - redis
       - cassandra
