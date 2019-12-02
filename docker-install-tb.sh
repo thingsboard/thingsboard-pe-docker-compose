@@ -60,6 +60,10 @@ ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
 
 ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
 
+if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
+    docker-compose -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS up -d  $ADDITIONAL_STARTUP_SERVICES
+fi
+
 docker-compose -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} tbpe
 
 

@@ -39,6 +39,7 @@ services:
     - "9042"
     volumes:
       - ./tb-node/cassandra:/var/lib/cassandra
+      - ./tb-node/log/cassandra:/var/log/cassandra
   tbpe:
     env_file:
       - tb-node.cassandra.env
