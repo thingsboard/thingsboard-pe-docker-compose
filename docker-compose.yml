@@ -37,9 +37,9 @@ services:
     restart: always
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
     ports:
-      - "8080"
-      - "1883"
-      - "5683"
+      - "9090:8080"
+      - "1883:1883"
+      - "5683:5683"
     logging:
       driver: "json-file"
       options:
