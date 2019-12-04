@@ -1,6 +1,8 @@
 # Docker configuration for ThingsBoard Microservices
 
-This folder containing scripts and Docker Compose configurations to run ThingsBoard in Microservices mode. 
+This folder containing scripts and Docker Compose configurations to run ThingsBoard with Cassandra database.
 
-See official [documentation page](https://thingsboard.io/docs/user-guide/install/pe/cluster-setup/) for more details.
+ 
+
+See official [documentation page](https://thingsboard.io/docs/user-guide/install/pe/docker-cassandra/) for more details.
 
