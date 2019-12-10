@@ -1,4 +1,4 @@
-# Docker configuration for ThingsBoard Microservices
+# Docker configuration for ThingsBoard PE with Cassandra
 
 This folder containing scripts and Docker Compose configurations to run ThingsBoard with Cassandra database.
 
