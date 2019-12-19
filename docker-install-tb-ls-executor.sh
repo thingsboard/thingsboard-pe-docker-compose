@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
@@ -29,27 +30,16 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-version: '2.2'
+while [[ $# -gt 0 ]]
+do
+key="$1"
 
-services:
-  cassandra:
-    restart: always
-    image: "cassandra:3.11.3"
-    ports:
-    - "9042"
-    volumes:
-      - ./tb-node/cassandra:/var/lib/cassandra
-  tb1:
-    env_file:
-      - tb-node.cassandra.env
-    depends_on:
-      - kafka
-      - redis
-      - cassandra
-  tb2:
-    env_file:
-      - tb-node.cassandra.env
-    depends_on:
-      - kafka
-      - redis
-      - cassandra
+shift # past argument or value
+done
+
+set -e
+
+docker-compose -f docker-compose.yml up -d
+docker-compose -f docker-compose.yml run --no-deps --rm tb-js-executor
+
+
