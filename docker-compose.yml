@@ -43,7 +43,7 @@ services:
       ZOO_SERVERS: server.1=zookeeper:2888:3888;zookeeper:2181
   kafka:
     restart: always
-    image: "wurstmeister/kafka:2.12-2.2.1"
+    image: "wurstmeister/kafka:2.12-2.3.0"
     ports:
       - "9092:9092"
     env_file:
@@ -85,6 +85,8 @@ services:
       - kafka
       - redis
       - tb-js-executor
+      - tb-rule-engine1
+      - tb-rule-engine2
   tb-core2:
     restart: always
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
@@ -107,6 +109,8 @@ services:
       - kafka
       - redis
       - tb-js-executor
+      - tb-rule-engine1
+      - tb-rule-engine2
   tb-rule-engine1:
     restart: always
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
