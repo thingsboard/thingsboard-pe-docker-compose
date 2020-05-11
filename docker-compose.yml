@@ -41,15 +41,6 @@ services:
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zookeeper:2888:3888;zookeeper:2181
-  kafka:
-    restart: always
-    image: "wurstmeister/kafka:2.12-2.3.0"
-    ports:
-      - "9092:9092"
-    env_file:
-      - kafka.env
-    depends_on:
-      - zookeeper
   redis:
     restart: always
     image: redis:4.0
@@ -61,8 +52,6 @@ services:
     scale: 20
     env_file:
       - tb-js-executor.env
-    depends_on:
-      - kafka
   tb-core1:
     restart: always
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
@@ -82,7 +71,7 @@ services:
       - ./tb-node/conf:/config
       - ./tb-node/log:/var/log/thingsboard
     depends_on:
-      - kafka
+      - zookeeper
       - redis
       - tb-js-executor
       - tb-rule-engine1
@@ -106,7 +95,7 @@ services:
       - ./tb-node/conf:/config
       - ./tb-node/log:/var/log/thingsboard
     depends_on:
-      - kafka
+      - zookeeper
       - redis
       - tb-js-executor
       - tb-rule-engine1
@@ -130,7 +119,7 @@ services:
       - ./tb-node/conf:/config
       - ./tb-node/log:/var/log/thingsboard
     depends_on:
-      - kafka
+      - zookeeper
       - redis
       - tb-js-executor
   tb-rule-engine2:
@@ -152,7 +141,7 @@ services:
       - ./tb-node/conf:/config
       - ./tb-node/log:/var/log/thingsboard
     depends_on:
-      - kafka
+      - zookeeper
       - redis
       - tb-js-executor
   tb-web-report1:
@@ -182,7 +171,7 @@ services:
       - ./tb-transports/mqtt/conf:/config
       - ./tb-transports/mqtt/log:/var/log/tb-mqtt-transport
     depends_on:
-      - kafka
+      - zookeeper
   tb-mqtt-transport2:
     restart: always
     image: "${DOCKER_REPO}/${MQTT_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -196,7 +185,7 @@ services:
       - ./tb-transports/mqtt/conf:/config
       - ./tb-transports/mqtt/log:/var/log/tb-mqtt-transport
     depends_on:
-      - kafka
+      - zookeeper
   tb-http-transport1:
     restart: always
     image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -210,7 +199,7 @@ services:
       - ./tb-transports/http/conf:/config
       - ./tb-transports/http/log:/var/log/tb-http-transport
     depends_on:
-      - kafka
+      - zookeeper
   tb-http-transport2:
     restart: always
     image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -224,7 +213,7 @@ services:
       - ./tb-transports/http/conf:/config
       - ./tb-transports/http/log:/var/log/tb-http-transport
     depends_on:
-      - kafka
+      - zookeeper
   tb-coap-transport:
     restart: always
     image: "${DOCKER_REPO}/${COAP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -238,7 +227,7 @@ services:
       - ./tb-transports/coap/conf:/config
       - ./tb-transports/coap/log:/var/log/tb-coap-transport
     depends_on:
-      - kafka
+      - zookeeper
   tb-web-ui1:
     restart: always
     image: "${DOCKER_REPO}/${WEB_UI_DOCKER_NAME}:${TB_VERSION}"
