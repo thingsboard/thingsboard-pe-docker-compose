@@ -1,8 +1,13 @@
 haproxy/certs.d/**
 haproxy/letsencrypt/**
 tb-node/log/**
+tb-node/data/**
 tb-node/db/**
 tb-node/postgres/**
 tb-node/cassandra/**
 tb-transports/*/log
 !.env
+*/.idea/**
+.idea/**
+.idea
+*.iml

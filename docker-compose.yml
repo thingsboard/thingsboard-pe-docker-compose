@@ -94,6 +94,7 @@ services:
     volumes:
       - ./tb-node/conf:/config
       - ./tb-node/log:/var/log/thingsboard
+      - ./tb-node/data:/data
     depends_on:
       - zookeeper
       - redis
@@ -118,6 +119,7 @@ services:
     volumes:
       - ./tb-node/conf:/config
       - ./tb-node/log:/var/log/thingsboard
+      - ./tb-node/data:/data
     depends_on:
       - zookeeper
       - redis
