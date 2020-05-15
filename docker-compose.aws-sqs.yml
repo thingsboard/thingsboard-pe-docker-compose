@@ -29,10 +29,58 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-export JAVA_OPTS="$JAVA_OPTS -Xloggc:/var/log/tb-http-transport/${TB_SERVICE_ID}/gc.log -XX:+IgnoreUnrecognizedVMOptions -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/tb-http-transport/${TB_SERVICE_ID}/heapdump.bin -XX:+PrintGCDetails -XX:+PrintGCDateStamps"
-export JAVA_OPTS="$JAVA_OPTS -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10"
-export JAVA_OPTS="$JAVA_OPTS -XX:GCLogFileSize=10M -XX:-UseBiasedLocking -XX:+UseTLAB -XX:+ResizeTLAB -XX:+PerfDisableSharedMem -XX:+UseCondCardMark"
-export JAVA_OPTS="$JAVA_OPTS -XX:CMSWaitDuration=10000 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+CMSParallelInitialMarkEnabled"
-export JAVA_OPTS="$JAVA_OPTS -XX:+CMSEdenChunksRecordAlways -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+ExitOnOutOfMemoryError"
-export LOG_FILENAME=tb-http-transport.out
-export LOADER_PATH=/usr/share/tb-http-transport/conf
+version: '2.2'
+
+services:
+  tb-js-executor:
+    env_file:
+      - queue-aws-sqs.env
+  tb-core1:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-core2:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-rule-engine1:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-rule-engine2:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-mqtt-transport1:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-mqtt-transport2:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-http-transport1:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-http-transport2:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-coap-transport:
+    env_file:
+      - queue-aws-sqs.env
+    depends_on:
+      - zookeeper
