@@ -29,10 +29,12 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-export JAVA_OPTS="$JAVA_OPTS -Xloggc:/var/log/tb-http-transport/${TB_SERVICE_ID}/gc.log -XX:+IgnoreUnrecognizedVMOptions -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/tb-http-transport/${TB_SERVICE_ID}/heapdump.bin -XX:+PrintGCDetails -XX:+PrintGCDateStamps"
-export JAVA_OPTS="$JAVA_OPTS -XX:+PrintHeapAtGC -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10"
-export JAVA_OPTS="$JAVA_OPTS -XX:GCLogFileSize=10M -XX:-UseBiasedLocking -XX:+UseTLAB -XX:+ResizeTLAB -XX:+PerfDisableSharedMem -XX:+UseCondCardMark"
-export JAVA_OPTS="$JAVA_OPTS -XX:CMSWaitDuration=10000 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+CMSParallelInitialMarkEnabled"
-export JAVA_OPTS="$JAVA_OPTS -XX:+CMSEdenChunksRecordAlways -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+ExitOnOutOfMemoryError"
-export LOG_FILENAME=tb-http-transport.out
-export LOADER_PATH=/usr/share/tb-http-transport/conf
+mkdir -p tb-node/log && sudo chown -R 799:799 tb-node/log
+
+mkdir -p tb-node/data && sudo chown -R 799:799 tb-node/data
+
+mkdir -p tb-transports/coap/log && sudo chown -R 799:799 tb-transports/coap/log
+
+mkdir -p tb-transports/http/log && sudo chown -R 799:799 tb-transports/http/log
+
+mkdir -p tb-transports/mqtt/log && sudo chown -R 799:799 tb-transports/mqtt/log
