@@ -34,36 +34,15 @@ version: '2.2'
 services:
   postgres:
     restart: always
-    image: "postgres:12"
+    image: "postgres:11.6"
     ports:
     - "5432"
     environment:
       POSTGRES_DB: thingsboard
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./tb-node/postgres:/var/lib/postgresql/data
-  tb-core1:
-    env_file:
-      - ../tb-node.postgres.env
-    depends_on:
-      - zookeeper
-      - redis
-      - postgres
-  tb-core2:
-    env_file:
-      - ../tb-node.postgres.env
-    depends_on:
-      - zookeeper
-      - redis
-      - postgres
-  tb-rule-engine1:
-    env_file:
-      - ../tb-node.postgres.env
-    depends_on:
-      - zookeeper
-      - redis
-      - postgres
-  tb-rule-engine2:
+      - ../tb-node/postgres:/var/lib/postgresql/data
+  tb-monolith:
     env_file:
       - ../tb-node.postgres.env
     depends_on:

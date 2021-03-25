@@ -65,6 +65,9 @@ services:
     environment:
       TB_SERVICE_ID: tb-monolith
       TB_SERVICE_TYPE: monolith
+      HTTP_ENABLED: "false"
+      MQTT_ENABLED: "false"
+      COAP_ENABLED: "false"
     env_file:
       - ../tb-node.env
     volumes:

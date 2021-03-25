@@ -50,6 +50,25 @@ function deploymentFolder() {
     echo $DEPLOYMENT_FOLDER
 }
 
+function mainServiceName() {
+    source .env
+    MAIN_SERVICE_NAME=""
+    case $TB_SETUP in
+        monolith)
+        MAIN_SERVICE_NAME="tb-monolith"
+        ;;
+        basic)
+        MAIN_SERVICE_NAME="tb-monolith"
+        ;;
+        advanced)
+        MAIN_SERVICE_NAME="tb-core1"
+        ;;
+        *)
+        echo "Unknown or missing TB_SETUP value specified in the .env file: '${TB_SETUP}'. Should be either 'monolith' or 'basic' or 'advanced'." >&2
+        exit 1
+    esac
+    echo $MAIN_SERVICE_NAME
+}
 
 function additionalComposeArgs() {
     source .env

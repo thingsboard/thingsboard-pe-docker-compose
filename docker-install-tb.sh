@@ -58,6 +58,8 @@ source compose-utils.sh
 
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
+MAIN_SERVICE_NAME=$(mainServiceName) || exit $?
+
 ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
 
 ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
@@ -70,6 +72,6 @@ if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
     docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS up -d redis $ADDITIONAL_STARTUP_SERVICES
 fi
 
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} tb-core1
+docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} $MAIN_SERVICE_NAME
 
-
+cd ~-
