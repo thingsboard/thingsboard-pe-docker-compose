@@ -36,7 +36,7 @@ services:
       - ./tb-node/cassandra:/var/lib/cassandra
   tb-core1:
     env_file:
-      - tb-node.hybrid.env
+      - ../tb-node.hybrid.env
     depends_on:
       - zookeeper
       - redis
@@ -44,7 +44,7 @@ services:
       - cassandra
   tb-core2:
     env_file:
-      - tb-node.hybrid.env
+      - ../tb-node.hybrid.env
     depends_on:
       - zookeeper
       - redis
@@ -52,7 +52,7 @@ services:
       - cassandra
   tb-rule-engine1:
     env_file:
-      - tb-node.hybrid.env
+      - ../tb-node.hybrid.env
     depends_on:
       - zookeeper
       - redis
@@ -60,7 +60,7 @@ services:
       - cassandra
   tb-rule-engine2:
     env_file:
-      - tb-node.hybrid.env
+      - ../tb-node.hybrid.env
     depends_on:
       - zookeeper
       - redis

@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
@@ -30,46 +29,58 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-while [[ $# -gt 0 ]]
-do
-key="$1"
+version: '2.2'
 
-case $key in
-    --loadDemo)
-    LOAD_DEMO=true
-    shift # past argument
-    ;;
-    *)
-            # unknown option
-    ;;
-esac
-shift # past argument or value
-done
-
-if [ "$LOAD_DEMO" == "true" ]; then
-    loadDemo=true
-else
-    loadDemo=false
-fi
-
-set -e
-
-source compose-utils.sh
-
-DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
-
-ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
-
-ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
-
-ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
-
-cd $DEPLOYMENT_FOLDER
-
-if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
-    docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS up -d redis $ADDITIONAL_STARTUP_SERVICES
-fi
-
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} tb-core1
-
-
+services:
+  tb-js-executor:
+    env_file:
+      - ../queue-aws-sqs.env
+  tb-core1:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-core2:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-rule-engine1:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-rule-engine2:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+      - redis
+  tb-mqtt-transport1:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-mqtt-transport2:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-http-transport1:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-http-transport2:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-coap-transport:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper

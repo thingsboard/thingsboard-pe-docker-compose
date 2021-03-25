@@ -32,41 +32,50 @@
 version: '2.2'
 
 services:
-  tb-js-executor:
-    env_file:
-      - queue-confluent.env
+  postgres:
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
   tb-core1:
-    env_file:
-      - queue-confluent.env
-    depends_on:
-      - redis
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-core2:
-    env_file:
-      - queue-confluent.env
-    depends_on:
-      - redis
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-rule-engine1:
-    env_file:
-      - queue-confluent.env
-    depends_on:
-      - redis
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-rule-engine2:
-    env_file:
-      - queue-confluent.env
-    depends_on:
-      - redis
-  tb-mqtt-transport1:
-    env_file:
-      - queue-confluent.env
-  tb-mqtt-transport2:
-    env_file:
-      - queue-confluent.env
-  tb-http-transport1:
-    env_file:
-      - queue-confluent.env
-  tb-http-transport2:
-    env_file:
-      - queue-confluent.env
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-coap-transport:
-    env_file:
-      - queue-confluent.env
+    volumes:
+      - tb-coap-transport-log-volume:/var/log/tb-coap-transport
+  tb-http-transport1:
+    volumes:
+      - tb-http-transport-log-volume:/var/log/tb-http-transport
+  tb-http-transport2:
+    volumes:
+      - tb-http-transport-log-volume:/var/log/tb-http-transport
+  tb-mqtt-transport1:
+    volumes:
+      - tb-mqtt-transport-log-volume:/var/log/tb-mqtt-transport
+  tb-mqtt-transport2:
+    volumes:
+      - tb-mqtt-transport-log-volume:/var/log/tb-mqtt-transport
+
+volumes:
+  postgres-db-volume:
+    external: true
+    name: ${POSTGRES_DATA_VOLUME}
+  tb-log-volume:
+    external: true
+    name: ${TB_LOG_VOLUME}
+  tb-coap-transport-log-volume:
+    external: true
+    name: ${TB_COAP_TRANSPORT_LOG_VOLUME}
+  tb-http-transport-log-volume:
+    external: true
+    name: ${TB_HTTP_TRANSPORT_LOG_VOLUME}
+  tb-mqtt-transport-log-volume:
+    external: true
+    name: ${TB_MQTT_TRANSPORT_LOG_VOLUME}

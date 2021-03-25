@@ -1,5 +1,5 @@
-haproxy/certs.d/**
-haproxy/letsencrypt/**
+advanced/haproxy/certs.d/**
+advanced/haproxy/letsencrypt/**
 tb-node/log/**
 tb-node/data/**
 tb-node/db/**

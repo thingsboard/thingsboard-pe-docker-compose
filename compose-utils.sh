@@ -30,6 +30,27 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
+function deploymentFolder() {
+    source .env
+    DEPLOYMENT_FOLDER=""
+    case $TB_SETUP in
+        monolith)
+        DEPLOYMENT_FOLDER="monolith"
+        ;;
+        basic)
+        DEPLOYMENT_FOLDER="basic"
+        ;;
+        advanced)
+        DEPLOYMENT_FOLDER="advanced"
+        ;;
+        *)
+        echo "Unknown or missing TB_SETUP value specified in the .env file: '${TB_SETUP}'. Should be either 'monolith' or 'basic' or 'advanced'." >&2
+        exit 1
+    esac
+    echo $DEPLOYMENT_FOLDER
+}
+
+
 function additionalComposeArgs() {
     source .env
     ADDITIONAL_COMPOSE_ARGS=""
@@ -41,7 +62,7 @@ function additionalComposeArgs() {
         ADDITIONAL_COMPOSE_ARGS="-f docker-compose.hybrid.yml"
         ;;
         *)
-        echo "Unknown DATABASE value specified: '${DATABASE}'. Should be either postgres or hybrid." >&2
+        echo "Unknown DATABASE value specified in the .env file: '${DATABASE}'. Should be either 'postgres' or 'hybrid'." >&2
         exit 1
     esac
     echo $ADDITIONAL_COMPOSE_ARGS
@@ -70,7 +91,7 @@ function additionalComposeQueueArgs() {
         ADDITIONAL_COMPOSE_QUEUE_ARGS="-f docker-compose.service-bus.yml"
         ;;
         *)
-        echo "Unknown Queue service value specified: '${TB_QUEUE_TYPE}'. Should be either kafka or confluent or aws-sqs or pubsub or rabbitmq or service-bus." >&2
+        echo "Unknown Queue service value specified in the .env file: '${TB_QUEUE_TYPE}'. Should be either 'kafka' or 'confluent' or 'aws-sqs' or 'pubsub' or 'rabbitmq' or 'service-bus'." >&2
         exit 1
     esac
     echo $ADDITIONAL_COMPOSE_QUEUE_ARGS
