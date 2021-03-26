@@ -1,8 +1,7 @@
-#!/bin/bash
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2021 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -30,47 +29,41 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-for i in "$@"
-do
-case $i in
-    --fromVersion=*)
-    FROM_VERSION="${i#*=}"
-    shift
-    ;;
-    *)
-            # unknown option
-    ;;
-esac
-done
+version: '2.2'
 
-if [[ -z "${FROM_VERSION// }" ]]; then
-    echo "--fromVersion parameter is invalid or unspecified!"
-    echo "Usage: docker-upgrade-tb.sh --fromVersion={VERSION}"
-    exit 1
-else
-    fromVersion="${FROM_VERSION// }"
-fi
-
-set -e
-
-source compose-utils.sh
-
-DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
-
-MAIN_SERVICE_NAME=$(mainServiceName) || exit $?
-
-ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
-
-ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
-
-ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
-
-cd $DEPLOYMENT_FOLDER
-
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS pull $MAIN_SERVICE_NAME
-
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS up -d redis $ADDITIONAL_STARTUP_SERVICES
-
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} $MAIN_SERVICE_NAME
-
-cd ~-
+services:
+  kafka:
+    restart: always
+    image: "wurstmeister/kafka:2.13-2.6.0"
+    ports:
+      - "9092:9092"
+    env_file:
+      - ../kafka.env
+    depends_on:
+      - zookeeper
+  tb-js-executor:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka
+  tb-monolith:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka
+      - redis
+  tb-mqtt-transport:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka
+  tb-http-transport:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka
+  tb-coap-transport:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka

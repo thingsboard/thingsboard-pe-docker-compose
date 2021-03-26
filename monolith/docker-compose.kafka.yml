@@ -38,60 +38,17 @@ services:
     ports:
       - "9092:9092"
     env_file:
-      - kafka.env
+      - ../kafka.env
     depends_on:
       - zookeeper
   tb-js-executor:
     env_file:
-      - queue-kafka.env
+      - ../queue-kafka.env
     depends_on:
       - kafka
-  tb-core1:
+  tb-monolith:
     env_file:
-      - queue-kafka.env
+      - ../queue-kafka.env
     depends_on:
       - kafka
       - redis
-  tb-core2:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka
-      - redis
-  tb-rule-engine1:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka
-      - redis
-  tb-rule-engine2:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka
-      - redis
-  tb-mqtt-transport1:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka
-  tb-mqtt-transport2:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka
-  tb-http-transport1:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka
-  tb-http-transport2:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka
-  tb-coap-transport:
-    env_file:
-      - queue-kafka.env
-    depends_on:
-      - kafka

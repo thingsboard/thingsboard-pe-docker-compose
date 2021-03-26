@@ -51,8 +51,8 @@ services:
     image: "${DOCKER_REPO}/${JS_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
     scale: 20
     env_file:
-      - tb-js-executor.env
-  tb-core1:
+      - ../tb-js-executor.env
+  tb-monolith:
     restart: always
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
     ports:
@@ -63,106 +63,29 @@ services:
         max-size: "200m"
         max-file: "30"
     environment:
-      TB_SERVICE_ID: tb-core1
-      TB_SERVICE_TYPE: tb-core
+      TB_SERVICE_ID: tb-monolith
+      TB_SERVICE_TYPE: monolith
+      HTTP_ENABLED: "false"
+      MQTT_ENABLED: "false"
+      COAP_ENABLED: "false"
     env_file:
-      - tb-node.env
+      - ../tb-node.env
     volumes:
-      - ./tb-node/conf:/config
-      - ./tb-node/log:/var/log/thingsboard
-      - ./tb-node/data:/data
+      - ../tb-node/conf:/config
+      - ../tb-node/log:/var/log/thingsboard
+      - ../tb-node/data:/data
     depends_on:
       - zookeeper
       - redis
       - tb-js-executor
-      - tb-rule-engine1
-      - tb-rule-engine2
-  tb-core2:
-    restart: always
-    image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8080"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200m"
-        max-file: "30"
-    environment:
-      TB_SERVICE_ID: tb-core2
-      TB_SERVICE_TYPE: tb-core
-    env_file:
-      - tb-node.env
-    volumes:
-      - ./tb-node/conf:/config
-      - ./tb-node/log:/var/log/thingsboard
-      - ./tb-node/data:/data
-    depends_on:
-      - zookeeper
-      - redis
-      - tb-js-executor
-      - tb-rule-engine1
-      - tb-rule-engine2
-  tb-rule-engine1:
-    restart: always
-    image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8080"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200m"
-        max-file: "30"
-    environment:
-      TB_SERVICE_ID: tb-rule-engine1
-      TB_SERVICE_TYPE: tb-rule-engine
-    env_file:
-      - tb-node.env
-    volumes:
-      - ./tb-node/conf:/config
-      - ./tb-node/log:/var/log/thingsboard
-      - ./tb-node/data:/data
-    depends_on:
-      - zookeeper
-      - redis
-      - tb-js-executor
-  tb-rule-engine2:
-    restart: always
-    image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8080"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200m"
-        max-file: "30"
-    environment:
-      TB_SERVICE_ID: tb-rule-engine2
-      TB_SERVICE_TYPE: tb-rule-engine
-    env_file:
-      - tb-node.env
-    volumes:
-      - ./tb-node/conf:/config
-      - ./tb-node/log:/var/log/thingsboard
-      - ./tb-node/data:/data
-    depends_on:
-      - zookeeper
-      - redis
-      - tb-js-executor
-  tb-web-report1:
+  tb-web-report:
     restart: always
     image: "${DOCKER_REPO}/${WEB_REPORT_DOCKER_NAME}:${TB_VERSION}"
     ports:
       - "8383"
     env_file:
-      - tb-web-report.env
-  tb-web-report2:
-    restart: always
-    image: "${DOCKER_REPO}/${WEB_REPORT_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8383"
-    env_file:
-      - tb-web-report.env
-  tb-mqtt-transport1:
+      - ../tb-web-report.env
+  tb-mqtt-transport:
     restart: always
     image: "${DOCKER_REPO}/${MQTT_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
     ports:
@@ -170,27 +93,13 @@ services:
     environment:
       TB_SERVICE_ID: tb-mqtt-transport1
     env_file:
-      - tb-mqtt-transport.env
+      - ../tb-mqtt-transport.env
     volumes:
-      - ./tb-transports/mqtt/conf:/config
-      - ./tb-transports/mqtt/log:/var/log/tb-mqtt-transport
+      - ../tb-transports/mqtt/conf:/config
+      - ../tb-transports/mqtt/log:/var/log/tb-mqtt-transport
     depends_on:
       - zookeeper
-  tb-mqtt-transport2:
-    restart: always
-    image: "${DOCKER_REPO}/${MQTT_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "1883"
-    environment:
-      TB_SERVICE_ID: tb-mqtt-transport2
-    env_file:
-      - tb-mqtt-transport.env
-    volumes:
-      - ./tb-transports/mqtt/conf:/config
-      - ./tb-transports/mqtt/log:/var/log/tb-mqtt-transport
-    depends_on:
-      - zookeeper
-  tb-http-transport1:
+  tb-http-transport:
     restart: always
     image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
     ports:
@@ -198,24 +107,10 @@ services:
     environment:
       TB_SERVICE_ID: tb-http-transport1
     env_file:
-      - tb-http-transport.env
+      - ../tb-http-transport.env
     volumes:
-      - ./tb-transports/http/conf:/config
-      - ./tb-transports/http/log:/var/log/tb-http-transport
-    depends_on:
-      - zookeeper
-  tb-http-transport2:
-    restart: always
-    image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8081"
-    environment:
-      TB_SERVICE_ID: tb-http-transport2
-    env_file:
-      - tb-http-transport.env
-    volumes:
-      - ./tb-transports/http/conf:/config
-      - ./tb-transports/http/log:/var/log/tb-http-transport
+      - ../tb-transports/http/conf:/config
+      - ../tb-transports/http/log:/var/log/tb-http-transport
     depends_on:
       - zookeeper
   tb-coap-transport:
@@ -226,26 +121,19 @@ services:
     environment:
       TB_SERVICE_ID: tb-coap-transport
     env_file:
-      - tb-coap-transport.env
+      - ../tb-coap-transport.env
     volumes:
-      - ./tb-transports/coap/conf:/config
-      - ./tb-transports/coap/log:/var/log/tb-coap-transport
+      - ../tb-transports/coap/conf:/config
+      - ../tb-transports/coap/log:/var/log/tb-coap-transport
     depends_on:
       - zookeeper
-  tb-web-ui1:
+  tb-web-ui:
     restart: always
     image: "${DOCKER_REPO}/${WEB_UI_DOCKER_NAME}:${TB_VERSION}"
     ports:
       - "8080"
     env_file:
-      - tb-web-ui.env
-  tb-web-ui2:
-    restart: always
-    image: "${DOCKER_REPO}/${WEB_UI_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8080"
-    env_file:
-      - tb-web-ui.env
+      - ../tb-web-ui.env
   haproxy:
     restart: always
     container_name: "${LOAD_BALANCER_NAME}"
@@ -268,13 +156,8 @@ services:
       WEBREPORT_PORT: 8383
       FORCE_HTTPS_REDIRECT: "false"
     links:
-        - tb-core1
-        - tb-core2
-        - tb-web-ui1
-        - tb-web-ui2
-        - tb-web-report1
-        - tb-web-report2
-        - tb-mqtt-transport1
-        - tb-mqtt-transport2
-        - tb-http-transport1
-        - tb-http-transport2
+        - tb-monolith
+        - tb-web-ui
+        - tb-web-report
+        - tb-mqtt-transport
+        - tb-http-transport
