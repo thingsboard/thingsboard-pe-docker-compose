@@ -39,5 +39,4 @@ services:
     env_file:
       - ../queue-service-bus.env
     depends_on:
-      - zookeeper
       - redis

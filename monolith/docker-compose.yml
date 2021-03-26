@@ -33,14 +33,6 @@
 version: '2.2'
 
 services:
-  zookeeper:
-    restart: always
-    image: "zookeeper:3.5"
-    ports:
-      - "2181"
-    environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=zookeeper:2888:3888;zookeeper:2181
   redis:
     restart: always
     image: redis:4.0
@@ -74,7 +66,6 @@ services:
       - ../tb-node/log:/var/log/thingsboard
       - ../tb-node/data:/data
     depends_on:
-      - zookeeper
       - redis
       - tb-js-executor
   tb-web-report:
