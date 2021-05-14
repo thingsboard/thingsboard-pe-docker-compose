@@ -52,3 +52,6 @@ services:
   tb-lwm2m-transport:
     env_file:
       - ../queue-confluent.env
+  tb-snmp-transport:
+    env_file:
+      - ../queue-confluent.env

@@ -61,3 +61,8 @@ services:
       - ../queue-pubsub.env
     depends_on:
       - zookeeper
+  tb-snmp-transport:
+    env_file:
+      - ../queue-pubsub.env
+    depends_on:
+      - zookeeper
