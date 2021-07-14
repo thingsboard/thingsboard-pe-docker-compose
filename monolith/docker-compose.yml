@@ -58,7 +58,6 @@ services:
     ports:
       - "8080"
       - "1883"
-      - "7070"
       - "5683:5683/udp"
     logging:
       driver: "json-file"
@@ -68,7 +67,6 @@ services:
     environment:
       TB_SERVICE_ID: tb-monolith
       TB_SERVICE_TYPE: monolith
-      EDGES_ENABLED: "true"
     env_file:
       - ../tb-node.env
     volumes:
@@ -98,7 +96,6 @@ services:
      - "80:80"
      - "443:443"
      - "1883:1883"
-     - "7070:7070"
      - "9999:9999"
     cap_add:
      - NET_ADMIN
@@ -107,7 +104,6 @@ services:
       HTTPS_PORT: 443
       MQTT_PORT: 1883
       WEBREPORT_PORT: 8383
-      EDGES_RPC_PORT: 7070
       FORCE_HTTPS_REDIRECT: "false"
     links:
         - tb-monolith
