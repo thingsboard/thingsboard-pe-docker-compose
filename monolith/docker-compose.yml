@@ -59,6 +59,7 @@ services:
       - "8080"
       - "7070"
       - "1883"
+      - "7070"
       - "5683:5683/udp"
       - "5685:5685/udp"
     logging:
@@ -109,6 +110,7 @@ services:
       MQTT_PORT: 1883
       EDGES_RPC_PORT: 7070
       WEBREPORT_PORT: 8383
+      EDGES_RPC_PORT: 7070
       FORCE_HTTPS_REDIRECT: "false"
     links:
         - tb-monolith

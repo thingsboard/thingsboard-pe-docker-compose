@@ -15,7 +15,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 5,
   "links": [],
   "panels": [
     {
@@ -25,9 +24,7 @@
       "dashes": false,
       "datasource": null,
       "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -39,7 +36,7 @@
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 2,
+      "id": 5,
       "legend": {
         "avg": false,
         "current": false,
@@ -67,33 +64,18 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (job,quantile) (ruleEngine_Main_seconds)*1000",
+          "expr": "increase(attributes_cache_total[1m])",
           "interval": "",
-          "legendFormat": "Main {{job}} Quantile - {{quantile}}, ms",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by (job,quantile) (ruleEngine_HighPriority_seconds)*1000",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "HighPriority  {{job}} Quantile - {{quantile}}, ms",
+          "legendFormat": "{{job}} {{result}}",
+          "queryType": "randomWalk",
           "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by (job,quantile) (ruleEngine_SequentialByOriginator_seconds)*1000",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "SequentialByOriginator  {{job}} Quantile - {{quantile}}, ms",
-          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Quantiles Latency, ms",
+      "title": "Cache Stats",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -137,9 +119,7 @@
       "dashes": false,
       "datasource": null,
       "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -179,33 +159,26 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "ruleEngine_Main_seconds_max *1000",
+          "expr": "sum (increase(attributes_cache_total{result=\"hit\"}[1m]))",
           "interval": "",
-          "legendFormat": "Max - {{job}}, ms",
+          "legendFormat": "Hits",
+          "queryType": "randomWalk",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "ruleEngine_HighPriority_seconds_max *1000",
+          "expr": "sum (increase(attributes_cache_total{result=\"miss\"}[1m]))",
           "hide": false,
           "interval": "",
-          "legendFormat": "HighPriority - {{job}}, ms",
+          "legendFormat": "Misses",
           "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "ruleEngine_SequentialByOriginator_seconds_max *1000",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "SequentialByOriginator - {{job}}, ms",
-          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Max Latency, ms",
+      "title": "Summarized Cache Stats",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -249,9 +222,7 @@
       "dashes": false,
       "datasource": null,
       "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -263,7 +234,7 @@
         "y": 9
       },
       "hiddenSeries": false,
-      "id": 5,
+      "id": 2,
       "legend": {
         "avg": false,
         "current": false,
@@ -291,33 +262,18 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(increase(ruleEngine_Main_seconds_sum[1m])  / increase(ruleEngine_Main_seconds_count[1m])) * 1000",
+          "expr": "100*\n(\n  sum(increase(attributes_cache_total{result=\"hit\"}[1m])) / \n ( \n    sum(increase(attributes_cache_total{result=\"hit\"}[1m]))\n    + sum(increase(attributes_cache_total{result=\"miss\"}[1m]))\n    )\n)",
           "interval": "",
-          "legendFormat": "Main  {{job}}",
+          "legendFormat": "Hit Ratio, %",
+          "queryType": "randomWalk",
           "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "(increase(ruleEngine_HighPriority_seconds_sum[1m])  / increase(ruleEngine_HighPriority_seconds_count[1m])) * 1000",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "HighPriority {{job}}",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "(increase(ruleEngine_SequentialByOriginator_seconds_sum[1m])  / increase(ruleEngine_SequentialByOriginator_seconds_count[1m])) * 1000",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "SequentialByOriginator {{job}}",
-          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Average by 1m",
+      "title": "Attributes Cache Hit Ratio %",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -355,7 +311,7 @@
       }
     }
   ],
-  "refresh": "10s",
+  "refresh": false,
   "schemaVersion": 27,
   "style": "dark",
   "tags": [],
@@ -363,24 +319,12 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
-  "timepicker": {
-    "refresh_intervals": [
-      "10s",
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m",
-      "1h",
-      "2h",
-      "1d"
-    ]
-  },
+  "timepicker": {},
   "timezone": "",
-  "title": "Rule Engine Latency",
-  "uid": "-qNMB1SGz",
+  "title": "Attributes Cache",
+  "uid": "dxj2OYTMk",
   "version": 2
 }

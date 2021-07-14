@@ -1,7 +1,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2021 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -29,10 +29,53 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-export JAVA_OPTS="$JAVA_OPTS -Xlog:gc*,heap*,age*,safepoint=debug:file=/var/log/tb-lwm2m-transport/${TB_SERVICE_ID}-gc.log:time,uptime,level,tags:filecount=10,filesize=10M"
-export JAVA_OPTS="$JAVA_OPTS -XX:+IgnoreUnrecognizedVMOptions -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/tb-lwm2m-transport/${TB_SERVICE_ID}-heapdump.bin"
-export JAVA_OPTS="$JAVA_OPTS -XX:-UseBiasedLocking -XX:+UseTLAB -XX:+ResizeTLAB -XX:+PerfDisableSharedMem -XX:+UseCondCardMark"
-export JAVA_OPTS="$JAVA_OPTS -XX:+UseG1GC -XX:MaxGCPauseMillis=500 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:MaxTenuringThreshold=10"
-export JAVA_OPTS="$JAVA_OPTS -XX:+ExitOnOutOfMemoryError"
-export LOG_FILENAME=tb-lwm2m-transport.out
-export LOADER_PATH=/usr/share/tb-lwm2m-transport/conf
+# config file version
+apiVersion: 1
+
+# list of datasources that should be deleted from the database
+deleteDatasources:
+  - name: Prometheus
+    orgId: 1
+
+# list of datasources to insert/update depending
+# whats available in the database
+datasources:
+  # <string, required> name of the datasource. Required
+- name: Prometheus
+  # <string, required> datasource type. Required
+  type: prometheus
+  # <string, required> access mode. direct or proxy. Required
+  access: proxy
+  # <int> org id. will default to orgId 1 if not specified
+  orgId: 1
+  # <string> url
+  url: http://prometheus:9090
+  # <string> database password, if used
+  password:
+  # <string> database user, if used
+  user:
+  # <string> database name, if used
+  database:
+  # <bool> enable/disable basic auth
+  basicAuth: false
+  # <string> basic auth username, if used
+  basicAuthUser:
+  # <string> basic auth password, if used
+  basicAuthPassword:
+  # <bool> enable/disable with credentials headers
+  withCredentials:
+  # <bool> mark as default datasource. Max one per org
+  isDefault: true
+  # <map> fields that will be converted to json and stored in json_data
+  jsonData:
+     graphiteVersion: "1.1"
+     tlsAuth: false
+     tlsAuthWithCACert: false
+  # <string> json object of data that will be encrypted.
+  secureJsonData:
+    tlsCACert: "..."
+    tlsClientCert: "..."
+    tlsClientKey: "..."
+  version: 1
+  # <bool> allow users to edit datasources from the UI.
+  editable: true

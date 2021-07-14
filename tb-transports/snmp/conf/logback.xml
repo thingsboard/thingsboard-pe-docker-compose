@@ -3,7 +3,11 @@
 
     ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 
+<<<<<<< HEAD
     Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
+=======
+    Copyright © 2016-2021 ThingsBoard, Inc. All Rights Reserved.
+>>>>>>> 093fd989efe09557e8119ec283627273059d0a77
 
     NOTICE: All information contained herein is, and remains
     the property of ThingsBoard, Inc. and its suppliers,
@@ -62,4 +66,8 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
+<<<<<<< HEAD
 </configuration>
+=======
+</configuration>
+>>>>>>> 093fd989efe09557e8119ec283627273059d0a77
