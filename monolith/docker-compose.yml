@@ -57,7 +57,6 @@ services:
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
     ports:
       - "8080"
-      - "7070"
       - "1883"
       - "7070"
       - "5683:5683/udp"
