@@ -42,8 +42,10 @@ ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
 
 ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
 
+ADDITIONAL_COMPOSE_OVERRIDE_ARGS=$(additionalComposeOverrideArgs) || exit $?
+
 cd $DEPLOYMENT_FOLDER
 
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS $ADDITIONAL_COMPOSE_MONITORING_ARGS up -d
+docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS $ADDITIONAL_COMPOSE_MONITORING_ARGS $ADDITIONAL_COMPOSE_OVERRIDE_ARGS up -d
 
 cd ~-

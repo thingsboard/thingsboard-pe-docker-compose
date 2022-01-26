@@ -11,3 +11,5 @@ tb-transports/*/log
 .idea/**
 .idea
 *.iml
+
+docker-compose.override.yml
