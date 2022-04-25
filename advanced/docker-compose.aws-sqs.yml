@@ -94,3 +94,13 @@ services:
       - ../queue-aws-sqs.env
     depends_on:
       - zookeeper
+  tb-integration-executor1:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper
+  tb-integration-executor2:
+    env_file:
+      - ../queue-aws-sqs.env
+    depends_on:
+      - zookeeper

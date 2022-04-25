@@ -105,3 +105,13 @@ services:
       - ../queue-kafka.env
     depends_on:
       - kafka
+  tb-integration-executor1:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka
+  tb-integration-executor2:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka

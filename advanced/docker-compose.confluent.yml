@@ -76,3 +76,9 @@ services:
   tb-snmp-transport:
     env_file:
       - ../queue-confluent.env
+  tb-integration-executor1:
+    env_file:
+      - ../queue-confluent.env
+  tb-integration-executor2:
+    env_file:
+      - ../queue-confluent.env

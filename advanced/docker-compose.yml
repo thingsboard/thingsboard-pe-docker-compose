@@ -68,6 +68,7 @@ services:
       TB_SERVICE_ID: tb-core1
       TB_SERVICE_TYPE: tb-core
       EDGES_ENABLED: "true"
+      TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
       - ../tb-node.env
     volumes:
@@ -96,6 +97,7 @@ services:
       TB_SERVICE_ID: tb-core2
       TB_SERVICE_TYPE: tb-core
       EDGES_ENABLED: "true"
+      TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
       - ../tb-node.env
     volumes:
@@ -154,6 +156,56 @@ services:
       - zookeeper
       - redis
       - tb-js-executor
+  tb-integration-executor1:
+    restart: always
+    image: "${DOCKER_REPO}/tb-pe-integration-executor:${TB_VERSION}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "30"
+    environment:
+      TB_SERVICE_ID: tb-ie1
+      TB_SERVICE_TYPE: tb-integration-executor
+    ports:
+      - "5682/udp"
+      - "8082"
+    env_file:
+      - ../tb-integration-executor.env
+    volumes:
+      - ../tb-integration-executor/conf:/config
+      - ../tb-integration-executor/log:/var/log/tb-integration-executor
+    depends_on:
+      - zookeeper
+      - redis
+      - tb-js-executor
+      - tb-core1
+      - tb-core2
+  tb-integration-executor2:
+    restart: always
+    image: "${DOCKER_REPO}/tb-pe-integration-executor:${TB_VERSION}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "30"
+    environment:
+      TB_SERVICE_ID: tb-ie2
+      TB_SERVICE_TYPE: tb-integration-executor
+    ports:
+      - "5682/udp"
+      - "8082"
+    env_file:
+      - ../tb-integration-executor.env
+    volumes:
+      - ../tb-integration-executor/conf:/config
+      - ../tb-integration-executor/log:/var/log/tb-integration-executor
+    depends_on:
+      - zookeeper
+      - redis
+      - tb-js-executor
+      - tb-core1
+      - tb-core2
   tb-web-report1:
     restart: always
     image: "${DOCKER_REPO}/${WEB_REPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -314,3 +366,5 @@ services:
         - tb-mqtt-transport2
         - tb-http-transport1
         - tb-http-transport2
+        - tb-integration-executor1
+        - tb-integration-executor2

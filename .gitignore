@@ -6,6 +6,7 @@ tb-node/db/**
 tb-node/postgres/**
 tb-node/cassandra/**
 tb-transports/*/log
+tb-integration-executor/log/
 !.env
 */.idea/**
 .idea/**
