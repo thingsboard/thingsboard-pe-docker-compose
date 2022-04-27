@@ -47,6 +47,12 @@ services:
   tb-rule-engine2:
     volumes:
       - tb-log-volume:/var/log/thingsboard
+  tb-integration-executor1:
+    volumes:
+      - tb-ie-log-volume:/var/log/tb-integration-executor
+  tb-integration-executor2:
+    volumes:
+      - tb-ie-log-volume:/var/log/tb-integration-executor
   tb-coap-transport:
     volumes:
       - tb-coap-transport-log-volume:/var/log/tb-coap-transport
@@ -76,6 +82,9 @@ volumes:
   tb-log-volume:
     external: true
     name: ${TB_LOG_VOLUME}
+  tb-ie-log-volume:
+    external: true
+    name: ${TB_INTEGRATION_EXECUTOR_LOG_VOLUME}
   tb-coap-transport-log-volume:
     external: true
     name: ${TB_COAP_TRANSPORT_LOG_VOLUME}
