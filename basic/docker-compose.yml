@@ -104,6 +104,8 @@ services:
       - ../tb-transports/mqtt/log:/var/log/tb-mqtt-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-http-transport:
     restart: always
     image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -118,6 +120,8 @@ services:
       - ../tb-transports/http/log:/var/log/tb-http-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-coap-transport:
     restart: always
     image: "${DOCKER_REPO}/${COAP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -132,6 +136,8 @@ services:
       - ../tb-transports/coap/log:/var/log/tb-coap-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-lwm2m-transport:
     restart: always
     image: "${DOCKER_REPO}/${LWM2M_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -146,6 +152,8 @@ services:
       - ../tb-transports/lwm2m/log:/var/log/tb-lwm2m-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-snmp-transport:
     restart: always
     image: "${DOCKER_REPO}/${SNMP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -158,6 +166,8 @@ services:
       - ../tb-transports/snmp/log:/var/log/tb-snmp-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-web-ui:
     restart: always
     image: "${DOCKER_REPO}/${WEB_UI_DOCKER_NAME}:${TB_VERSION}"
