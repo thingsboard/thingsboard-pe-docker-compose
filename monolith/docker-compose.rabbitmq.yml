@@ -38,6 +38,3 @@ services:
   tb-monolith:
     env_file:
       - ../queue-rabbitmq.env
-    depends_on:
-      - zookeeper
-      - redis
