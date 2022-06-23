@@ -2,7 +2,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2021 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -30,35 +30,11 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-while [[ $# -gt 0 ]]
-do
-key="$1"
-
-case $key in
-    --loadDemo)
-    LOAD_DEMO=true
-    shift # past argument
-    ;;
-    *)
-            # unknown option
-    ;;
-esac
-shift # past argument or value
-done
-
-if [ "$LOAD_DEMO" == "true" ]; then
-    loadDemo=true
-else
-    loadDemo=false
-fi
-
 set -e
 
 source compose-utils.sh
 
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
-
-MAIN_SERVICE_NAME=$(mainServiceName) || exit $?
 
 ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
 
@@ -68,14 +44,8 @@ ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
 
 ADDITIONAL_COMPOSE_OVERRIDE_ARGS=$(additionalComposeOverrideArgs) || exit $?
 
-ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
-
 cd $DEPLOYMENT_FOLDER
 
-if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
-    docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS $ADDITIONAL_COMPOSE_MONITORING_ARGS $ADDITIONAL_COMPOSE_OVERRIDE_ARGS up -d redis $ADDITIONAL_STARTUP_SERVICES
-fi
-
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS $ADDITIONAL_COMPOSE_MONITORING_ARGS $ADDITIONAL_COMPOSE_OVERRIDE_ARGS run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} $MAIN_SERVICE_NAME
+docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS $ADDITIONAL_COMPOSE_MONITORING_ARGS $ADDITIONAL_COMPOSE_OVERRIDE_ARGS config
 
 cd ~-

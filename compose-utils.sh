@@ -128,6 +128,18 @@ function additionalComposeMonitoringArgs() {
     fi
 }
 
+function additionalComposeOverrideArgs() {
+    source .env
+
+    if [ -f ./docker-compose.override.yml ]
+    then
+      ADDITIONAL_COMPOSE_OVERRIDE_ARGS="-f ../docker-compose.override.yml"
+      echo $ADDITIONAL_COMPOSE_OVERRIDE_ARGS
+    else
+      echo ""
+    fi
+}
+
 function additionalStartupServices() {
     source .env
     ADDITIONAL_STARTUP_SERVICES=""
