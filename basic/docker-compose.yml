@@ -174,8 +174,8 @@ services:
     env_file:
       - ../tb-vc-executor.env
     volumes:
-      - ./tb-vc-executor/conf:/config
-      - ./tb-vc-executor/log:/var/log/tb-vc-executor
+      - ../tb-vc-executor/conf:/config
+      - ../tb-vc-executor/log:/var/log/tb-vc-executor
     depends_on:
       - zookeeper
       - tb-monolith
