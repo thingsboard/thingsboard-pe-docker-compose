@@ -71,6 +71,12 @@ services:
   tb-vc-executor2:
     volumes:
       - tb-vc-executor-log-volume:/var/log/tb-vc-executor
+  tb-integration-executor1:
+    volumes:
+      - tb-ie-log-volume:/var/log/tb-integration-executor
+  tb-integration-executor2:
+    volumes:
+      - tb-ie-log-volume:/var/log/tb-integration-executor
 
 volumes:
   tb-log-volume:
@@ -94,3 +100,6 @@ volumes:
   tb-vc-executor-log-volume:
     external: true
     name: ${TB_VC_EXECUTOR_LOG_VOLUME}
+  tb-ie-log-volume:
+    external: true
+    name: ${TB_INTEGRATION_EXECUTOR_LOG_VOLUME}
