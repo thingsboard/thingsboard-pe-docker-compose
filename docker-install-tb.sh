@@ -73,7 +73,8 @@ cd $DEPLOYMENT_FOLDER
 if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
     docker-compose \
       --env-file ../.env \
-      -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS up -d $ADDITIONAL_STARTUP_SERVICES
+      -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
+      up -d $ADDITIONAL_STARTUP_SERVICES
 fi
 
 docker-compose \
