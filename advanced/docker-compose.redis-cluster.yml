@@ -36,7 +36,7 @@ services:
   redis-node-0:
     image: bitnami/redis-cluster:7.0
     volumes:
-      - ./tb-node/redis-cluster-data-0:/bitnami/redis/data
+      - ../tb-node/redis-cluster-data-0:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=thingsboard'
       - 'REDISCLI_AUTH=thingsboard'
@@ -45,7 +45,7 @@ services:
   redis-node-1:
     image: bitnami/redis-cluster:7.0
     volumes:
-      - ./tb-node/redis-cluster-data-1:/bitnami/redis/data
+      - ../tb-node/redis-cluster-data-1:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=thingsboard'
       - 'REDISCLI_AUTH=thingsboard'
@@ -54,7 +54,7 @@ services:
   redis-node-2:
     image: bitnami/redis-cluster:7.0
     volumes:
-      - ./tb-node/redis-cluster-data-2:/bitnami/redis/data
+      - ../tb-node/redis-cluster-data-2:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=thingsboard'
       - 'REDISCLI_AUTH=thingsboard'
@@ -63,7 +63,7 @@ services:
   redis-node-3:
     image: bitnami/redis-cluster:7.0
     volumes:
-      - ./tb-node/redis-cluster-data-3:/bitnami/redis/data
+      - ../tb-node/redis-cluster-data-3:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=thingsboard'
       - 'REDISCLI_AUTH=thingsboard'
@@ -72,7 +72,7 @@ services:
   redis-node-4:
     image: bitnami/redis-cluster:7.0
     volumes:
-      - ./tb-node/redis-cluster-data-4:/bitnami/redis/data
+      - ../tb-node/redis-cluster-data-4:/bitnami/redis/data
     environment:
       - 'REDIS_PASSWORD=thingsboard'
       - 'REDISCLI_AUTH=thingsboard'
@@ -81,7 +81,7 @@ services:
   redis-node-5:
     image: bitnami/redis-cluster:7.0
     volumes:
-      - ./tb-node/redis-cluster-data-5:/bitnami/redis/data
+      - ../tb-node/redis-cluster-data-5:/bitnami/redis/data
     depends_on:
       - redis-node-0
       - redis-node-1
