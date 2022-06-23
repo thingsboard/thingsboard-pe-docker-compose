@@ -168,7 +168,6 @@ services:
       - ../tb-integration-executor/log:/var/log/tb-integration-executor
     depends_on:
       - zookeeper
-      - redis
       - tb-js-executor
       - tb-core1
       - tb-core2
@@ -193,7 +192,6 @@ services:
       - ../tb-integration-executor/log:/var/log/tb-integration-executor
     depends_on:
       - zookeeper
-      - redis
       - tb-js-executor
       - tb-core1
       - tb-core2
