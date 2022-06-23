@@ -149,7 +149,7 @@ services:
       - tb-js-executor
   tb-integration-executor1:
     restart: always
-    image: "${DOCKER_REPO}/tb-pe-integration-executor:${TB_VERSION}"
+    image: "${DOCKER_REPO}/${TB_INTEGRATION_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
     logging:
       driver: "json-file"
       options:
@@ -174,7 +174,7 @@ services:
       - tb-core2
   tb-integration-executor2:
     restart: always
-    image: "${DOCKER_REPO}/tb-pe-integration-executor:${TB_VERSION}"
+    image: "${DOCKER_REPO}/${TB_INTEGRATION_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
     logging:
       driver: "json-file"
       options:
