@@ -38,31 +38,21 @@ services:
   tb-monolith:
     env_file:
       - ../queue-rabbitmq.env
-    depends_on:
-      - zookeeper
-      - redis
   tb-mqtt-transport:
     env_file:
       - ../queue-rabbitmq.env
-    depends_on:
-      - zookeeper
   tb-http-transport:
     env_file:
       - ../queue-rabbitmq.env
-    depends_on:
-      - zookeeper
   tb-coap-transport:
     env_file:
       - ../queue-rabbitmq.env
-    depends_on:
-      - zookeeper
   tb-lwm2m-transport:
     env_file:
       - ../queue-rabbitmq.env
-    depends_on:
-      - zookeeper
   tb-snmp-transport:
     env_file:
       - ../queue-rabbitmq.env
-    depends_on:
-      - zookeeper
+  tb-vc-executor:
+    env_file:
+      - ../queue-rabbitmq.env
