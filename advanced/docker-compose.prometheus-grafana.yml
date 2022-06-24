@@ -45,7 +45,7 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
-      - 9090
+      - 9090 # PE does not expose this port to avoid port binding conflict with load balancer exposed port
     restart: always
   grafana:
     image: grafana/grafana

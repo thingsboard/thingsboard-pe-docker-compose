@@ -32,51 +32,74 @@
 version: '2.2'
 
 services:
-  tb-js-executor:
-    env_file:
-      - ../queue-confluent.env
   tb-core1:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-core2:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-rule-engine1:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-rule-engine2:
-    env_file:
-      - ../queue-confluent.env
-  tb-mqtt-transport1:
-    env_file:
-      - ../queue-confluent.env
-  tb-mqtt-transport2:
-    env_file:
-      - ../queue-confluent.env
-  tb-http-transport1:
-    env_file:
-      - ../queue-confluent.env
-  tb-http-transport2:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-log-volume:/var/log/thingsboard
   tb-coap-transport:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-coap-transport-log-volume:/var/log/tb-coap-transport
   tb-lwm2m-transport:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-lwm2m-transport-log-volume:/var/log/tb-lwm2m-transport
+  tb-http-transport1:
+    volumes:
+      - tb-http-transport-log-volume:/var/log/tb-http-transport
+  tb-http-transport2:
+    volumes:
+      - tb-http-transport-log-volume:/var/log/tb-http-transport
+  tb-mqtt-transport1:
+    volumes:
+      - tb-mqtt-transport-log-volume:/var/log/tb-mqtt-transport
+  tb-mqtt-transport2:
+    volumes:
+      - tb-mqtt-transport-log-volume:/var/log/tb-mqtt-transport
   tb-snmp-transport:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-snmp-transport-log-volume:/var/log/tb-snmp-transport
   tb-vc-executor1:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-vc-executor-log-volume:/var/log/tb-vc-executor
   tb-vc-executor2:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-vc-executor-log-volume:/var/log/tb-vc-executor
   tb-integration-executor1:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-ie-log-volume:/var/log/tb-integration-executor
   tb-integration-executor2:
-    env_file:
-      - ../queue-confluent.env
+    volumes:
+      - tb-ie-log-volume:/var/log/tb-integration-executor
+
+volumes:
+  tb-log-volume:
+    external: true
+    name: ${TB_LOG_VOLUME}
+  tb-coap-transport-log-volume:
+    external: true
+    name: ${TB_COAP_TRANSPORT_LOG_VOLUME}
+  tb-lwm2m-transport-log-volume:
+    external: true
+    name: ${TB_LWM2M_TRANSPORT_LOG_VOLUME}
+  tb-http-transport-log-volume:
+    external: true
+    name: ${TB_HTTP_TRANSPORT_LOG_VOLUME}
+  tb-mqtt-transport-log-volume:
+    external: true
+    name: ${TB_MQTT_TRANSPORT_LOG_VOLUME}
+  tb-snmp-transport-log-volume:
+    external: true
+    name: ${TB_SNMP_TRANSPORT_LOG_VOLUME}
+  tb-vc-executor-log-volume:
+    external: true
+    name: ${TB_VC_EXECUTOR_LOG_VOLUME}
+  tb-ie-log-volume:
+    external: true
+    name: ${TB_INTEGRATION_EXECUTOR_LOG_VOLUME}

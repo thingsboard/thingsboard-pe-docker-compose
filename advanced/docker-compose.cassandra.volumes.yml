@@ -32,9 +32,11 @@
 version: '2.2'
 
 services:
-  tb-js-executor:
-    env_file:
-      - ../queue-rabbitmq.env
-  tb-monolith:
-    env_file:
-      - ../queue-rabbitmq.env
+  cassandra:
+    volumes:
+      - cassandra-volume:/var/lib/cassandra
+
+volumes:
+  cassandra-volume:
+    external: true
+    name: ${CASSANDRA_DATA_VOLUME}

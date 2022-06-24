@@ -32,9 +32,42 @@
 version: '2.2'
 
 services:
-  tb-js-executor:
-    env_file:
-      - ../queue-rabbitmq.env
-  tb-monolith:
-    env_file:
-      - ../queue-rabbitmq.env
+  # Redis cluster
+  redis-node-0:
+    volumes:
+      - redis-cluster-data-0:/bitnami/redis/data
+  redis-node-1:
+    volumes:
+      - redis-cluster-data-1:/bitnami/redis/data
+  redis-node-2:
+    volumes:
+      - redis-cluster-data-2:/bitnami/redis/data
+  redis-node-3:
+    volumes:
+      - redis-cluster-data-3:/bitnami/redis/data
+  redis-node-4:
+    volumes:
+      - redis-cluster-data-4:/bitnami/redis/data
+  redis-node-5:
+    volumes:
+      - redis-cluster-data-5:/bitnami/redis/data
+
+volumes:
+  redis-cluster-data-0:
+    external: true
+    name: ${REDIS_CLUSTER_DATA_VOLUME_0}
+  redis-cluster-data-1:
+    external: true
+    name: ${REDIS_CLUSTER_DATA_VOLUME_1}
+  redis-cluster-data-2:
+    external: true
+    name: ${REDIS_CLUSTER_DATA_VOLUME_2}
+  redis-cluster-data-3:
+    external: true
+    name: ${REDIS_CLUSTER_DATA_VOLUME_3}
+  redis-cluster-data-4:
+    external: true
+    name: ${REDIS_CLUSTER_DATA_VOLUME_4}
+  redis-cluster-data-5:
+    external: true
+    name: ${REDIS_CLUSTER_DATA_VOLUME_5}

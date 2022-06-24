@@ -51,25 +51,21 @@ services:
       - ../queue-kafka.env
     depends_on:
       - kafka
-      - redis
   tb-core2:
     env_file:
       - ../queue-kafka.env
     depends_on:
       - kafka
-      - redis
   tb-rule-engine1:
     env_file:
       - ../queue-kafka.env
     depends_on:
       - kafka
-      - redis
   tb-rule-engine2:
     env_file:
       - ../queue-kafka.env
     depends_on:
       - kafka
-      - redis
   tb-mqtt-transport1:
     env_file:
       - ../queue-kafka.env
@@ -101,6 +97,16 @@ services:
     depends_on:
       - kafka
   tb-snmp-transport:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka
+  tb-vc-executor1:
+    env_file:
+      - ../queue-kafka.env
+    depends_on:
+      - kafka
+  tb-vc-executor2:
     env_file:
       - ../queue-kafka.env
     depends_on:

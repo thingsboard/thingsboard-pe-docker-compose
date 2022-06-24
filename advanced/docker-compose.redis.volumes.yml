@@ -32,9 +32,11 @@
 version: '2.2'
 
 services:
-  tb-js-executor:
-    env_file:
-      - ../queue-rabbitmq.env
-  tb-monolith:
-    env_file:
-      - ../queue-rabbitmq.env
+  redis:
+    volumes:
+      - redis-data:/bitnami/redis/data
+
+volumes:
+  redis-data:
+    external: true
+    name: ${REDIS_DATA_VOLUME}

@@ -40,10 +40,15 @@ ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
 
 ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
 
+ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
+
 ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
 
 cd $DEPLOYMENT_FOLDER
 
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS $ADDITIONAL_COMPOSE_MONITORING_ARGS up -d
+docker-compose \
+  --env-file ../.env \
+  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS $ADDITIONAL_COMPOSE_MONITORING_ARGS \
+  up -d
 
 cd ~-
