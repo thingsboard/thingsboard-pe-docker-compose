@@ -68,6 +68,8 @@ ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
 ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
 
+checkFolders --create || exit $?
+
 cd $DEPLOYMENT_FOLDER
 
 if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
