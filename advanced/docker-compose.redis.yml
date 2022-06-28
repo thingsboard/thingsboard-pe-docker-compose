@@ -110,3 +110,13 @@ services:
       - ../cache-redis.env
     depends_on:
       - redis
+  tb-integration-executor1:
+    env_file:
+      - ../cache-redis.env
+    depends_on:
+      - redis
+  tb-integration-executor2:
+    env_file:
+      - ../cache-redis.env
+    depends_on:
+      - redis

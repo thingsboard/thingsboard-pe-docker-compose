@@ -169,3 +169,13 @@ services:
       - ../cache-redis-cluster.env
     depends_on:
       - redis-node-5
+  tb-integration-executor1:
+    env_file:
+      - ../cache-redis-cluster.env
+    depends_on:
+      - redis-node-5
+  tb-integration-executor2:
+    env_file:
+      - ../cache-redis-cluster.env
+    depends_on:
+      - redis-node-5
