@@ -14,6 +14,7 @@ tb-node/redis-cluster-data-5/**
 tb-node/redis-data/**
 tb-transports/*/log
 tb-integration-executor/log/
+tb-vc-executor/log/
 !.env
 */.idea/**
 .idea/**
