@@ -63,6 +63,7 @@ services:
       TB_SERVICE_ID: tb-monolith
       TB_SERVICE_TYPE: monolith
       EDGES_ENABLED: "true"
+      JAVA_OPTS: "${JAVA_OPTS}"
       HTTP_ENABLED: "false"
       MQTT_ENABLED: "false"
       COAP_ENABLED: "false"
@@ -91,6 +92,7 @@ services:
       - "1883"
     environment:
       TB_SERVICE_ID: tb-mqtt-transport1
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-mqtt-transport.env
     volumes:
@@ -106,6 +108,7 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-http-transport1
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-http-transport.env
     volumes:
@@ -121,6 +124,7 @@ services:
       - "5683:5683/udp"
     environment:
       TB_SERVICE_ID: tb-coap-transport
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-coap-transport.env
     volumes:
@@ -136,6 +140,7 @@ services:
       - "5685:5685/udp"
     environment:
       TB_SERVICE_ID: tb-lwm2m-transport
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-lwm2m-transport.env
     volumes:
@@ -149,6 +154,7 @@ services:
     image: "${DOCKER_REPO}/${SNMP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
     environment:
       TB_SERVICE_ID: tb-snmp-transport
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-snmp-transport.env
     volumes:
@@ -171,6 +177,7 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-vc-executor
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-vc-executor.env
     volumes:
