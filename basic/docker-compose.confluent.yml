@@ -38,8 +38,6 @@ services:
   tb-monolith:
     env_file:
       - ../queue-confluent.env
-    depends_on:
-      - redis
   tb-mqtt-transport:
     env_file:
       - ../queue-confluent.env
@@ -53,5 +51,8 @@ services:
     env_file:
       - ../queue-confluent.env
   tb-snmp-transport:
+    env_file:
+      - ../queue-confluent.env
+  tb-vc-executor:
     env_file:
       - ../queue-confluent.env

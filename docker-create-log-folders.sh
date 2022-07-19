@@ -29,16 +29,6 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-mkdir -p tb-node/log && sudo chown -R 799:799 tb-node/log
-
-mkdir -p tb-node/data && sudo chown -R 799:799 tb-node/data
-
-mkdir -p tb-transports/coap/log && sudo chown -R 799:799 tb-transports/coap/log
-
-mkdir -p tb-transports/lwm2m/log && sudo chown -R 799:799 tb-transports/lwm2m/log
-
-mkdir -p tb-transports/http/log && sudo chown -R 799:799 tb-transports/http/log
-
-mkdir -p tb-transports/mqtt/log && sudo chown -R 799:799 tb-transports/mqtt/log
-
-mkdir -p tb-transports/snmp/log && sudo chown -R 799:799 tb-transports/snmp/log
+set -e
+source compose-utils.sh
+checkFolders --create

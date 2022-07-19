@@ -63,14 +63,29 @@ ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
 
 ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
 
+ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
+
 ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
+
+checkFolders --create || exit $?
 
 cd $DEPLOYMENT_FOLDER
 
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS pull $MAIN_SERVICE_NAME
+docker-compose \
+  --env-file ../.env \
+  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
+  pull \
+  $MAIN_SERVICE_NAME
 
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS up -d redis $ADDITIONAL_STARTUP_SERVICES
+docker-compose \
+  --env-file ../.env \
+  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
+  up -d $ADDITIONAL_STARTUP_SERVICES
 
-docker-compose --env-file ../.env -f docker-compose.yml $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} $MAIN_SERVICE_NAME
+docker-compose \
+  --env-file ../.env \
+  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
+  run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} \
+  $MAIN_SERVICE_NAME
 
 cd ~-

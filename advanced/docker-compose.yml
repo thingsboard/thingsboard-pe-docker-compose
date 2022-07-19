@@ -29,27 +29,22 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-
 version: '2.2'
 
 services:
   zookeeper:
     restart: always
-    image: "zookeeper:3.5"
+    image: "zookeeper:3.8.0"
     ports:
       - "2181"
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zookeeper:2888:3888;zookeeper:2181
-  redis:
-    restart: always
-    image: redis:4.0
-    ports:
-      - "6379"
+      ZOO_ADMINSERVER_ENABLED: "false"
   tb-js-executor:
     restart: always
     image: "${DOCKER_REPO}/${JS_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
-    scale: 20
+    scale: 10
     env_file:
       - ../tb-js-executor.env
   tb-core1:
@@ -68,6 +63,8 @@ services:
       TB_SERVICE_ID: tb-core1
       TB_SERVICE_TYPE: tb-core
       EDGES_ENABLED: "true"
+      JAVA_OPTS: "${JAVA_OPTS}"
+      TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
       - ../tb-node.env
     volumes:
@@ -76,7 +73,6 @@ services:
       - ../tb-node/data:/data
     depends_on:
       - zookeeper
-      - redis
       - tb-js-executor
       - tb-rule-engine1
       - tb-rule-engine2
@@ -96,6 +92,8 @@ services:
       TB_SERVICE_ID: tb-core2
       TB_SERVICE_TYPE: tb-core
       EDGES_ENABLED: "true"
+      JAVA_OPTS: "${JAVA_OPTS}"
+      TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
       - ../tb-node.env
     volumes:
@@ -104,7 +102,6 @@ services:
       - ../tb-node/data:/data
     depends_on:
       - zookeeper
-      - redis
       - tb-js-executor
       - tb-rule-engine1
       - tb-rule-engine2
@@ -121,6 +118,7 @@ services:
     environment:
       TB_SERVICE_ID: tb-rule-engine1
       TB_SERVICE_TYPE: tb-rule-engine
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-node.env
     volumes:
@@ -129,7 +127,6 @@ services:
       - ../tb-node/data:/data
     depends_on:
       - zookeeper
-      - redis
       - tb-js-executor
   tb-rule-engine2:
     restart: always
@@ -144,6 +141,7 @@ services:
     environment:
       TB_SERVICE_ID: tb-rule-engine2
       TB_SERVICE_TYPE: tb-rule-engine
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-node.env
     volumes:
@@ -152,8 +150,57 @@ services:
       - ../tb-node/data:/data
     depends_on:
       - zookeeper
-      - redis
       - tb-js-executor
+  tb-integration-executor1:
+    restart: always
+    image: "${DOCKER_REPO}/${TB_INTEGRATION_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "30"
+    environment:
+      TB_SERVICE_ID: tb-ie1
+      TB_SERVICE_TYPE: tb-integration-executor
+      JAVA_OPTS: "${JAVA_OPTS}"
+    ports:
+      - "5682/udp"
+      - "8082"
+    env_file:
+      - ../tb-integration-executor.env
+    volumes:
+      - ../tb-integration-executor/conf:/config
+      - ../tb-integration-executor/log:/var/log/tb-integration-executor
+    depends_on:
+      - zookeeper
+      - tb-js-executor
+      - tb-core1
+      - tb-core2
+  tb-integration-executor2:
+    restart: always
+    image: "${DOCKER_REPO}/${TB_INTEGRATION_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "30"
+    environment:
+      TB_SERVICE_ID: tb-ie2
+      TB_SERVICE_TYPE: tb-integration-executor
+      JAVA_OPTS: "${JAVA_OPTS}"
+    ports:
+      - "5682/udp"
+      - "8082"
+    env_file:
+      - ../tb-integration-executor.env
+    volumes:
+      - ../tb-integration-executor/conf:/config
+      - ../tb-integration-executor/log:/var/log/tb-integration-executor
+    depends_on:
+      - zookeeper
+      - tb-js-executor
+      - tb-core1
+      - tb-core2
   tb-web-report1:
     restart: always
     image: "${DOCKER_REPO}/${WEB_REPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -175,6 +222,7 @@ services:
       - "1883"
     environment:
       TB_SERVICE_ID: tb-mqtt-transport1
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-mqtt-transport.env
     volumes:
@@ -182,6 +230,8 @@ services:
       - ../tb-transports/mqtt/log:/var/log/tb-mqtt-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-mqtt-transport2:
     restart: always
     image: "${DOCKER_REPO}/${MQTT_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -189,6 +239,7 @@ services:
       - "1883"
     environment:
       TB_SERVICE_ID: tb-mqtt-transport2
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-mqtt-transport.env
     volumes:
@@ -196,6 +247,8 @@ services:
       - ../tb-transports/mqtt/log:/var/log/tb-mqtt-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-http-transport1:
     restart: always
     image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -203,6 +256,7 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-http-transport1
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-http-transport.env
     volumes:
@@ -210,6 +264,8 @@ services:
       - ../tb-transports/http/log:/var/log/tb-http-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-http-transport2:
     restart: always
     image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -217,6 +273,7 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-http-transport2
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-http-transport.env
     volumes:
@@ -224,6 +281,8 @@ services:
       - ../tb-transports/http/log:/var/log/tb-http-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-coap-transport:
     restart: always
     image: "${DOCKER_REPO}/${COAP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -231,6 +290,7 @@ services:
       - "5683:5683/udp"
     environment:
       TB_SERVICE_ID: tb-coap-transport
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-coap-transport.env
     volumes:
@@ -238,6 +298,8 @@ services:
       - ../tb-transports/coap/log:/var/log/tb-coap-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-lwm2m-transport:
     restart: always
     image: "${DOCKER_REPO}/${LWM2M_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -245,6 +307,7 @@ services:
       - "5685:5685/udp"
     environment:
       TB_SERVICE_ID: tb-lwm2m-transport
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-lwm2m-transport.env
     volumes:
@@ -252,11 +315,14 @@ services:
       - ../tb-transports/lwm2m/log:/var/log/tb-lwm2m-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-snmp-transport:
     restart: always
     image: "${DOCKER_REPO}/${SNMP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
     environment:
       TB_SERVICE_ID: tb-snmp-transport
+      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../tb-snmp-transport.env
     volumes:
@@ -264,6 +330,8 @@ services:
       - ../tb-transports/snmp/log:/var/log/tb-snmp-transport
     depends_on:
       - zookeeper
+      - tb-core1
+      - tb-core2
   tb-web-ui1:
     restart: always
     image: "${DOCKER_REPO}/${WEB_UI_DOCKER_NAME}:${TB_VERSION}"
@@ -278,6 +346,40 @@ services:
       - "8080"
     env_file:
       - ../tb-web-ui.env
+  tb-vc-executor1:
+    restart: always
+    image: "${DOCKER_REPO}/${TB_VC_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
+    ports:
+      - "8081"
+    environment:
+      TB_SERVICE_ID: tb-vc-executor1
+      JAVA_OPTS: "${JAVA_OPTS}"
+    env_file:
+      - ../tb-vc-executor.env
+    volumes:
+      - ../tb-vc-executor/conf:/config
+      - ../tb-vc-executor/log:/var/log/tb-vc-executor
+    depends_on:
+      - zookeeper
+      - tb-core1
+      - tb-core2
+  tb-vc-executor2:
+    restart: always
+    image: "${DOCKER_REPO}/${TB_VC_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
+    ports:
+      - "8081"
+    environment:
+      TB_SERVICE_ID: tb-vc-executor2
+      JAVA_OPTS: "${JAVA_OPTS}"
+    env_file:
+      - ../tb-vc-executor.env
+    volumes:
+      - ../tb-vc-executor/conf:/config
+      - ../tb-vc-executor/log:/var/log/tb-vc-executor
+    depends_on:
+      - zookeeper
+      - tb-core1
+      - tb-core2
   haproxy:
     restart: always
     container_name: "${LOAD_BALANCER_NAME}"
@@ -314,3 +416,5 @@ services:
         - tb-mqtt-transport2
         - tb-http-transport1
         - tb-http-transport2
+        - tb-integration-executor1
+        - tb-integration-executor2

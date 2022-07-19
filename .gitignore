@@ -5,7 +5,16 @@ tb-node/data/**
 tb-node/db/**
 tb-node/postgres/**
 tb-node/cassandra/**
+tb-node/redis-cluster-data-0/**
+tb-node/redis-cluster-data-1/**
+tb-node/redis-cluster-data-2/**
+tb-node/redis-cluster-data-3/**
+tb-node/redis-cluster-data-4/**
+tb-node/redis-cluster-data-5/**
+tb-node/redis-data/**
 tb-transports/*/log
+tb-integration-executor/log/
+tb-vc-executor/log/
 !.env
 */.idea/**
 .idea/**
