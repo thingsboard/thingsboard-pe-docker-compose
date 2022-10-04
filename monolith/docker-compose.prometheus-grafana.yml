@@ -42,8 +42,7 @@ services:
     volumes:
       - ./monitoring/prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+    command: --config.file=/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090 # PE does not expose this port to avoid port binding conflict with load balancer exposed port
     restart: always
