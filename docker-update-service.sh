@@ -44,11 +44,11 @@ ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
 cd $DEPLOYMENT_FOLDER
 
-docker-compose \
+docker compose \
   --env-file ../.env \
   -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
   pull $@
-docker-compose \
+docker compose \
   --env-file ../.env \
   -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
   up -d --no-deps --build $@

@@ -71,18 +71,18 @@ checkFolders --create || exit $?
 
 cd $DEPLOYMENT_FOLDER
 
-docker-compose \
+docker compose \
   --env-file ../.env \
   -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
   pull \
   $MAIN_SERVICE_NAME
 
-docker-compose \
+docker compose \
   --env-file ../.env \
   -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
   up -d $ADDITIONAL_STARTUP_SERVICES
 
-docker-compose \
+docker compose \
   --env-file ../.env \
   -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
   run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} \
