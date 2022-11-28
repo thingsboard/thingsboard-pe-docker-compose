@@ -2,7 +2,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2022 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -56,6 +56,8 @@ set -e
 
 source compose-utils.sh
 
+COMPOSE_VERSION=$(composeVersion) || exit $?
+
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
 MAIN_SERVICE_NAME=$(mainServiceName) || exit $?
@@ -73,16 +75,41 @@ checkFolders --create || exit $?
 cd $DEPLOYMENT_FOLDER
 
 if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
-    docker compose \
-      --env-file ../.env \
-      -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
-      up -d $ADDITIONAL_STARTUP_SERVICES
+
+    COMPOSE_ARGS="\
+          --env-file ../.env \
+          -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+          up -d ${ADDITIONAL_STARTUP_SERVICES}"
+
+    case $COMPOSE_VERSION in
+        V2)
+            docker compose $COMPOSE_ARGS
+        ;;
+        V1)
+            docker-compose $COMPOSE_ARGS
+        ;;
+        *)
+            # unknown option
+        ;;
+    esac
 fi
 
-docker compose \
-  --env-file ../.env \
-  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
-  run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} \
-  $MAIN_SERVICE_NAME
+COMPOSE_ARGS="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} \
+      ${MAIN_SERVICE_NAME}"
+
+case $COMPOSE_VERSION in
+    V2)
+        docker compose $COMPOSE_ARGS
+    ;;
+    V1)
+        docker-compose $COMPOSE_ARGS
+    ;;
+    *)
+        # unknown option
+    ;;
+esac
 
 cd ~-

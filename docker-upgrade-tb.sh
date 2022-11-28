@@ -2,7 +2,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2021 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2022 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -55,6 +55,8 @@ set -e
 
 source compose-utils.sh
 
+COMPOSE_VERSION=$(composeVersion) || exit $?
+
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
 MAIN_SERVICE_NAME=$(mainServiceName) || exit $?
@@ -71,21 +73,37 @@ checkFolders --create || exit $?
 
 cd $DEPLOYMENT_FOLDER
 
-docker compose \
-  --env-file ../.env \
-  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
-  pull \
-  $MAIN_SERVICE_NAME
+COMPOSE_ARGS_PULL="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      pull \
+      ${MAIN_SERVICE_NAME}"
 
-docker compose \
-  --env-file ../.env \
-  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
-  up -d $ADDITIONAL_STARTUP_SERVICES
+COMPOSE_ARGS_UP="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      up -d ${ADDITIONAL_STARTUP_SERVICES}"
 
-docker compose \
-  --env-file ../.env \
-  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
-  run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} \
-  $MAIN_SERVICE_NAME
+COMPOSE_ARGS_RUN="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} \
+      ${MAIN_SERVICE_NAME}"
+
+case $COMPOSE_VERSION in
+    V2)
+        docker compose $COMPOSE_ARGS_PULL
+        docker compose $COMPOSE_ARGS_UP
+        docker compose $COMPOSE_ARGS_RUN
+    ;;
+    V1)
+        docker-compose $COMPOSE_ARGS_PULL
+        docker-compose $COMPOSE_ARGS_UP
+        docker-compose $COMPOSE_ARGS_RUN
+    ;;
+    *)
+        # unknown option
+    ;;
+esac
 
 cd ~-
