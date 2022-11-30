@@ -29,6 +29,8 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
+version: '2.2'
+
 services:
   zookeeper:
     restart: always
@@ -42,8 +44,7 @@ services:
   tb-js-executor:
     restart: always
     image: "${DOCKER_REPO}/${JS_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
-    deploy:
-      replicas: 10
+    scale: 10
     env_file:
       - ../tb-js-executor.env
   tb-monolith:
