@@ -2,7 +2,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2021 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2022 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -34,6 +34,8 @@ set -e
 
 source compose-utils.sh
 
+COMPOSE_VERSION=$(composeVersion) || exit $?
+
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
 ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
@@ -44,13 +46,28 @@ ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
 cd $DEPLOYMENT_FOLDER
 
-docker-compose \
-  --env-file ../.env \
-  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
-  pull $@
-docker-compose \
-  --env-file ../.env \
-  -f docker-compose.yml $ADDITIONAL_CACHE_ARGS $ADDITIONAL_COMPOSE_ARGS $ADDITIONAL_COMPOSE_QUEUE_ARGS \
-  up -d --no-deps --build $@
+COMPOSE_ARGS_PULL="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      pull"
+
+COMPOSE_ARGS_BUILD="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      up -d --no-deps --build"
+
+case $COMPOSE_VERSION in
+    V2)
+        docker compose $COMPOSE_ARGS_PULL $@
+        docker compose $COMPOSE_ARGS_BUILD $@
+    ;;
+    V1)
+        docker-compose $COMPOSE_ARGS_PULL $@
+        docker-compose $COMPOSE_ARGS_BUILD $@
+    ;;
+    *)
+        # unknown option
+    ;;
+esac
 
 cd ~-
