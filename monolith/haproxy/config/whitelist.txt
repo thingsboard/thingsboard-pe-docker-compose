@@ -1,0 +1,10 @@
+# Private subnets
+# 10.0.0.0/8
+# Docker-compose subnets
+172.16.0.0/12
+# Local network subnets
+192.168.0.0/16
+# Allow loopback interface
+127.0.0.1
+::1
+# Allow trusted IPs or CIDRs below
