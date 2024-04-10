@@ -58,6 +58,9 @@ services:
       - "1883"
       - "5683:5683/udp"
       - "5685:5685/udp"
+      - "5686:5686/udp"
+      - "5687:5687/udp"
+      - "5688:5688/udp"
     logging:
       driver: "json-file"
       options:
