@@ -17,6 +17,12 @@
 version: '3.0'
 
 services:
+  tb-core1:
+    env_file:
+      - ../tb-node-edqs.env
+  tb-core2:
+    env_file:
+      - ../tb-node-edqs.env
   tb-edqs-1:
     restart: always
     image: "${DOCKER_REPO}/${EDQS_DOCKER_NAME}:${TB_VERSION}"

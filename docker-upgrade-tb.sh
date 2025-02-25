@@ -61,6 +61,8 @@ ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
 
 ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
+ADDITIONAL_COMPOSE_EDQS_ARGS=$(additionalComposeEdqsArgs) || exit $?
+
 ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
 
 checkFolders --create || exit $?
@@ -69,18 +71,21 @@ cd $DEPLOYMENT_FOLDER
 
 COMPOSE_ARGS_PULL="\
       --env-file ../.env \
-      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS}
+      ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
       pull \
       ${MAIN_SERVICE_NAME}"
 
 COMPOSE_ARGS_UP="\
       --env-file ../.env \
-      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS}
+      ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
       up -d ${ADDITIONAL_STARTUP_SERVICES}"
 
 COMPOSE_ARGS_RUN="\
       --env-file ../.env \
-      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS}
+      ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
       run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} \
       ${MAIN_SERVICE_NAME}"
 

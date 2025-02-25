@@ -149,6 +149,18 @@ function additionalComposeCacheArgs() {
     echo $CACHE_COMPOSE_ARGS
 }
 
+function additionalComposeEdqsArgs() {
+    source .env
+
+    if [ "$EDQS_ENABLED" = true ]
+    then
+      ADDITIONAL_COMPOSE_EDQS_ARGS="-f docker-compose.edqs.yml"
+      echo $ADDITIONAL_COMPOSE_EDQS_ARGS
+    else
+      echo ""
+    fi
+}
+
 function additionalStartupServices() {
     source .env
     ADDITIONAL_STARTUP_SERVICES=""
