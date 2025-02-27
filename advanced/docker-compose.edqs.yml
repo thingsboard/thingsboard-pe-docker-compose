@@ -28,12 +28,24 @@ services:
     image: "${DOCKER_REPO}/${EDQS_DOCKER_NAME}:${TB_VERSION}"
     env_file:
       - ../edqs.env
+    volumes:
+      - ./edqs/conf:/usr/share/edqs/conf
+      - ./edqs/log:/var/log/edqs
+    ports:
+      - "8080"
     depends_on:
       - zookeeper
+      - kafka
   tb-edqs-2:
     restart: always
     image: "${DOCKER_REPO}/${EDQS_DOCKER_NAME}:${TB_VERSION}"
     env_file:
       - ../edqs.env
+    volumes:
+      - ./edqs/conf:/usr/share/edqs/conf
+      - ./edqs/log:/var/log/edqs
+    ports:
+      - "8080"
     depends_on:
       - zookeeper
+      - kafka

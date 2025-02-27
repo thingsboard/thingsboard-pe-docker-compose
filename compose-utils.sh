@@ -206,6 +206,7 @@ function permissionList() {
       799  799  tb-transports/coap/log
       799  799  tb-vc-executor/log
       999  999  tb-node/postgres
+      799  799  edqs/log
       "
 
     PERMISSION_LIST="$PERMISSION_LIST
