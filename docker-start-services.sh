@@ -46,8 +46,6 @@ ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
 ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
 
-checkFolders --create || exit $?
-
 cd $DEPLOYMENT_FOLDER
 
 COMPOSE_ARGS="\
