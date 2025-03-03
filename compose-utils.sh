@@ -221,7 +221,7 @@ function permissionList() {
       "
     fi
 
-    if [ "$EDQS_ENABLED" = "true" ]; then
+    if [ "$EDQS_ENABLED" = true ]; then
       PERMISSION_LIST="$PERMISSION_LIST
       799  799  edqs/log
       "
