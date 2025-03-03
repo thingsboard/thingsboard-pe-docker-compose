@@ -50,8 +50,8 @@ services:
     env_file:
       - ../edqs.env
     volumes:
-      - ./edqs/conf:/usr/share/edqs/conf
-      - ./edqs/log:/var/log/edqs
+      - ../edqs/conf:/usr/share/edqs/conf
+      - ../edqs/log:/var/log/edqs
     ports:
       - "8080"
     depends_on:
@@ -63,8 +63,8 @@ services:
     env_file:
       - ../edqs.env
     volumes:
-      - ./edqs/conf:/usr/share/edqs/conf
-      - ./edqs/log:/var/log/edqs
+      - ../edqs/conf:/usr/share/edqs/conf
+      - ../edqs/log:/var/log/edqs
     ports:
       - "8080"
     depends_on:
