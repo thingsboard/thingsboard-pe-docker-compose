@@ -65,8 +65,6 @@ ADDITIONAL_COMPOSE_EDQS_ARGS=$(additionalComposeEdqsArgs) || exit $?
 
 ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
 
-checkFolders --create || exit $?
-
 cd $DEPLOYMENT_FOLDER
 
 COMPOSE_ARGS_PULL="\
