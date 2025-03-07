@@ -46,6 +46,8 @@ ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
 ADDITIONAL_COMPOSE_EDQS_ARGS=$(additionalComposeEdqsArgs) || exit $?
 
+ADDITIONAL_COMPOSE_JAVA_ARGS=$(additionalComposeJavaArgs) || exit $?
+
 ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
 
 checkFolders --create || exit $?

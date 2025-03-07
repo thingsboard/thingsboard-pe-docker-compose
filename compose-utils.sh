@@ -161,6 +161,25 @@ function additionalComposeEdqsArgs() {
     fi
 }
 
+function additionalComposeJavaArgs() {
+    source .env
+
+    case $JVM_MEMORY_OPTS in
+        none)
+        echo ""
+        ;;
+        shared)
+        ADDITIONAL_COMPOSE_JAVA_ARGS="-f docker-compose.mem-opts.shared.yml"
+        ;;
+        dedicated)
+        ADDITIONAL_COMPOSE_JAVA_ARGS="-f docker-compose.mem-opts.dedicated.yml"
+        ;;
+        *)
+        echo "Unknown JVM_MEMORY_OPTS value specified in the .env file: '${JVM_MEMORY_OPTS}'. Should be either 'none' or 'shared' or 'dedicated'." >&2
+        exit 1
+    esac
+}
+
 function additionalStartupServices() {
     source .env
     ADDITIONAL_STARTUP_SERVICES=""
