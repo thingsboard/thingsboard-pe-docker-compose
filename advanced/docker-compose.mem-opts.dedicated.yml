@@ -32,16 +32,16 @@
 services:
   tb-core1:
     env_file:
-      - ../config-env/tb-node.mem-opts.env
+      - ../config-env/tb-core.mem-opts.env
   tb-core2:
     env_file:
-      - ../config-env/tb-node.mem-opts.env
+      - ../config-env/tb-core.mem-opts.env
   tb-rule-engine1:
     env_file:
-      - ../config-env/tb-node.mem-opts.env
+      - ../config-env/tb-rule-engine.mem-opts.env
   tb-rule-engine2:
     env_file:
-      - ../config-env/tb-node.mem-opts.env
+      - ../config-env/tb-rule-engine.mem-opts.env
   tb-integration-executor1:
     env_file:
       - ../config-env/tb-integration-executor.mem-opts.env

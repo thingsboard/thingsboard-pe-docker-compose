@@ -32,7 +32,7 @@
 services:
   tb-monolith:
     env_file:
-      - ../config-env/tb-node.mem-opts.env
+      - ../config-env/tb-monolith.mem-opts.env
   tb-mqtt-transport:
     env_file:
       - ../config-env/tb-mqtt-transport.mem-opts.env
