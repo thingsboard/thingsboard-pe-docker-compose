@@ -32,25 +32,25 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-monolith:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-mqtt-transport:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-http-transport:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-coap-transport:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-lwm2m-transport:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-snmp-transport:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-vc-executor:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env

@@ -45,7 +45,7 @@ services:
     deploy:
       replicas: 10
     env_file:
-      - ../tb-js-executor.env
+      - ../config-env/tb-js-executor.env
   tb-core1:
     restart: always
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
@@ -65,7 +65,7 @@ services:
       JAVA_OPTS: "${JAVA_OPTS}"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
-      - ../tb-node.env
+      - ../config-env/tb-node.env
     volumes:
       - ../tb-node/conf:/config
       - ../tb-node/log:/var/log/thingsboard
@@ -94,7 +94,7 @@ services:
       JAVA_OPTS: "${JAVA_OPTS}"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
-      - ../tb-node.env
+      - ../config-env/tb-node.env
     volumes:
       - ../tb-node/conf:/config
       - ../tb-node/log:/var/log/thingsboard
@@ -119,7 +119,7 @@ services:
       TB_SERVICE_TYPE: tb-rule-engine
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-node.env
+      - ../config-env/tb-node.env
     volumes:
       - ../tb-node/conf:/config
       - ../tb-node/log:/var/log/thingsboard
@@ -142,7 +142,7 @@ services:
       TB_SERVICE_TYPE: tb-rule-engine
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-node.env
+      - ../config-env/tb-node.env
     volumes:
       - ../tb-node/conf:/config
       - ../tb-node/log:/var/log/thingsboard
@@ -166,7 +166,7 @@ services:
       - "5682/udp"
       - "8082"
     env_file:
-      - ../tb-integration-executor.env
+      - ../config-env/tb-integration-executor.env
     volumes:
       - ../tb-integration-executor/conf:/config
       - ../tb-integration-executor/log:/var/log/tb-integration-executor
@@ -191,7 +191,7 @@ services:
       - "5682/udp"
       - "8082"
     env_file:
-      - ../tb-integration-executor.env
+      - ../config-env/tb-integration-executor.env
     volumes:
       - ../tb-integration-executor/conf:/config
       - ../tb-integration-executor/log:/var/log/tb-integration-executor
@@ -206,14 +206,14 @@ services:
     ports:
       - "8383"
     env_file:
-      - ../tb-web-report.env
+      - ../config-env/tb-web-report.env
   tb-web-report2:
     restart: always
     image: "${DOCKER_REPO}/${WEB_REPORT_DOCKER_NAME}:${TB_VERSION}"
     ports:
       - "8383"
     env_file:
-      - ../tb-web-report.env
+      - ../config-env/tb-web-report.env
   tb-mqtt-transport1:
     restart: always
     image: "${DOCKER_REPO}/${MQTT_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -223,7 +223,7 @@ services:
       TB_SERVICE_ID: tb-mqtt-transport1
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-mqtt-transport.env
+      - ../config-env/tb-mqtt-transport.env
     volumes:
       - ../tb-transports/mqtt/conf:/config
       - ../tb-transports/mqtt/log:/var/log/tb-mqtt-transport
@@ -240,7 +240,7 @@ services:
       TB_SERVICE_ID: tb-mqtt-transport2
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-mqtt-transport.env
+      - ../config-env/tb-mqtt-transport.env
     volumes:
       - ../tb-transports/mqtt/conf:/config
       - ../tb-transports/mqtt/log:/var/log/tb-mqtt-transport
@@ -257,7 +257,7 @@ services:
       TB_SERVICE_ID: tb-http-transport1
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-http-transport.env
+      - ../config-env/tb-http-transport.env
     volumes:
       - ../tb-transports/http/conf:/config
       - ../tb-transports/http/log:/var/log/tb-http-transport
@@ -274,7 +274,7 @@ services:
       TB_SERVICE_ID: tb-http-transport2
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-http-transport.env
+      - ../config-env/tb-http-transport.env
     volumes:
       - ../tb-transports/http/conf:/config
       - ../tb-transports/http/log:/var/log/tb-http-transport
@@ -291,7 +291,7 @@ services:
       TB_SERVICE_ID: tb-coap-transport
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-coap-transport.env
+      - ../config-env/tb-coap-transport.env
     volumes:
       - ../tb-transports/coap/conf:/config
       - ../tb-transports/coap/log:/var/log/tb-coap-transport
@@ -311,7 +311,7 @@ services:
       TB_SERVICE_ID: tb-lwm2m-transport
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-lwm2m-transport.env
+      - ../config-env/tb-lwm2m-transport.env
     volumes:
       - ../tb-transports/lwm2m/conf:/config
       - ../tb-transports/lwm2m/log:/var/log/tb-lwm2m-transport
@@ -328,7 +328,7 @@ services:
       TB_SERVICE_ID: tb-snmp-transport
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-snmp-transport.env
+      - ../config-env/tb-snmp-transport.env
     volumes:
       - ../tb-transports/snmp/conf:/config
       - ../tb-transports/snmp/log:/var/log/tb-snmp-transport
@@ -342,14 +342,14 @@ services:
     ports:
       - "8080"
     env_file:
-      - ../tb-web-ui.env
+      - ../config-env/tb-web-ui.env
   tb-web-ui2:
     restart: always
     image: "${DOCKER_REPO}/${WEB_UI_DOCKER_NAME}:${TB_VERSION}"
     ports:
       - "8080"
     env_file:
-      - ../tb-web-ui.env
+      - ../config-env/tb-web-ui.env
   tb-vc-executor1:
     restart: always
     image: "${DOCKER_REPO}/${TB_VC_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
@@ -359,7 +359,7 @@ services:
       TB_SERVICE_ID: tb-vc-executor1
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-vc-executor.env
+      - ../config-env/tb-vc-executor.env
     volumes:
       - ../tb-vc-executor/conf:/config
       - ../tb-vc-executor/log:/var/log/tb-vc-executor
@@ -376,7 +376,7 @@ services:
       TB_SERVICE_ID: tb-vc-executor2
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-vc-executor.env
+      - ../config-env/tb-vc-executor.env
     volumes:
       - ../tb-vc-executor/conf:/config
       - ../tb-vc-executor/log:/var/log/tb-vc-executor

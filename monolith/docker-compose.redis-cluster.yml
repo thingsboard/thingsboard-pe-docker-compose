@@ -105,6 +105,6 @@ services:
 # ThingsBoard setup to use redis-cluster
   tb-monolith:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5

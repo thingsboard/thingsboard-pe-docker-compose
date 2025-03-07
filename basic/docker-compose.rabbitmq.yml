@@ -32,25 +32,25 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-monolith:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-mqtt-transport:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-http-transport:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-coap-transport:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-lwm2m-transport:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-snmp-transport:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-vc-executor:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env

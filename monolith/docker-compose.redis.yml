@@ -46,6 +46,6 @@ services:
 # ThingsBoard setup to use redis-standalone
   tb-monolith:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis

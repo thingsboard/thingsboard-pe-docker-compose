@@ -32,25 +32,25 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-monolith:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-mqtt-transport:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-http-transport:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-coap-transport:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-lwm2m-transport:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-snmp-transport:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-vc-executor:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env

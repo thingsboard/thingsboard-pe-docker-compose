@@ -45,7 +45,7 @@ services:
     deploy:
       replicas: 10
     env_file:
-      - ../tb-js-executor.env
+      - ../config-env/tb-js-executor.env
   tb-monolith:
     restart: always
     image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
@@ -70,7 +70,7 @@ services:
       EDGES_ENABLED: "true"
       JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
-      - ../tb-node.env
+      - ../config-env/tb-node.env
     volumes:
       - ../tb-node/conf:/config
       - ../tb-node/log:/var/log/thingsboard
@@ -84,7 +84,7 @@ services:
     ports:
       - "8383"
     env_file:
-      - ../tb-web-report.env
+      - ../config-env/tb-web-report.env
   haproxy:
     restart: always
     container_name: "${LOAD_BALANCER_NAME}"

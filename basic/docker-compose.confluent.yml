@@ -32,25 +32,25 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-monolith:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-mqtt-transport:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-http-transport:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-coap-transport:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-lwm2m-transport:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-snmp-transport:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-vc-executor:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env

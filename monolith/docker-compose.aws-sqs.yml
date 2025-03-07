@@ -32,7 +32,7 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env
   tb-monolith:
     env_file:
-      - ../queue-aws-sqs.env
+      - ../config-env/queue-aws-sqs.env

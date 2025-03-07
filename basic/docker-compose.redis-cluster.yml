@@ -105,36 +105,36 @@ services:
 # ThingsBoard setup to use redis-cluster
   tb-monolith:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5
   tb-mqtt-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5
   tb-http-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5
   tb-coap-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5
   tb-lwm2m-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5
   tb-snmp-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5
   tb-vc-executor:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../config-env/cache-redis-cluster.env
     depends_on:
       - redis-node-5

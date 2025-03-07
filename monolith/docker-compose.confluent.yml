@@ -32,7 +32,7 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env
   tb-monolith:
     env_file:
-      - ../queue-confluent.env
+      - ../config-env/queue-confluent.env

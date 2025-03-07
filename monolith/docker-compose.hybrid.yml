@@ -49,7 +49,7 @@ services:
       - ../tb-node/cassandra:/var/lib/cassandra
   tb-monolith:
     env_file:
-      - ../tb-node.hybrid.env
+      - ../config-env/tb-node.hybrid.env
     depends_on:
       - postgres
       - cassandra

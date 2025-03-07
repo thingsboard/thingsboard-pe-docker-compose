@@ -74,36 +74,36 @@ services:
 # ThingsBoard setup to use redis-sentinel
   tb-monolith:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel
   tb-mqtt-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel
   tb-http-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel
   tb-coap-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel
   tb-lwm2m-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel
   tb-snmp-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel
   tb-vc-executor:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel

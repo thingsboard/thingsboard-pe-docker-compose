@@ -32,7 +32,7 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env
   tb-monolith:
     env_file:
-      - ../queue-pubsub.env
+      - ../config-env/queue-pubsub.env

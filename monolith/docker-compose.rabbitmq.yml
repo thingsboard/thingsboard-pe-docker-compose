@@ -32,7 +32,7 @@
 services:
   tb-js-executor:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env
   tb-monolith:
     env_file:
-      - ../queue-rabbitmq.env
+      - ../config-env/queue-rabbitmq.env

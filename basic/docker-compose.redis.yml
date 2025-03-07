@@ -46,36 +46,36 @@ services:
 # ThingsBoard setup to use redis-standalone
   tb-monolith:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis
   tb-mqtt-transport:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis
   tb-http-transport:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis
   tb-coap-transport:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis
   tb-lwm2m-transport:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis
   tb-snmp-transport:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis
   tb-vc-executor:
     env_file:
-      - ../cache-redis.env
+      - ../config-env/cache-redis.env
     depends_on:
       - redis

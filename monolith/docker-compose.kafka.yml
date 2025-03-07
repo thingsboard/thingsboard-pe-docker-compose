@@ -36,16 +36,16 @@ services:
     ports:
       - "9092:9092"
     env_file:
-      - ../kafka.env
+      - ../config-env/kafka.env
     depends_on:
       - zookeeper
   tb-js-executor:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-monolith:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka

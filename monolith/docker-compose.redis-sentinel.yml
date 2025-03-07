@@ -68,6 +68,6 @@ services:
 # ThingsBoard setup to use redis-sentinel
   tb-monolith:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../config-env/cache-redis-sentinel.env
     depends_on:
       - redis-sentinel
