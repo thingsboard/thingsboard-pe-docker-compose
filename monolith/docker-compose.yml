@@ -68,7 +68,6 @@ services:
       TB_SERVICE_ID: tb-monolith
       TB_SERVICE_TYPE: monolith
       EDGES_ENABLED: "true"
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-node.env
     volumes:

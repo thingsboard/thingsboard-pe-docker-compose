@@ -62,7 +62,6 @@ services:
       TB_SERVICE_ID: tb-core1
       TB_SERVICE_TYPE: tb-core
       EDGES_ENABLED: "true"
-      JAVA_OPTS: "${JAVA_OPTS}"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
       - ../config-env/tb-node.env
@@ -91,7 +90,6 @@ services:
       TB_SERVICE_ID: tb-core2
       TB_SERVICE_TYPE: tb-core
       EDGES_ENABLED: "true"
-      JAVA_OPTS: "${JAVA_OPTS}"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
       - ../config-env/tb-node.env
@@ -117,7 +115,6 @@ services:
     environment:
       TB_SERVICE_ID: tb-rule-engine1
       TB_SERVICE_TYPE: tb-rule-engine
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-node.env
     volumes:
@@ -140,7 +137,6 @@ services:
     environment:
       TB_SERVICE_ID: tb-rule-engine2
       TB_SERVICE_TYPE: tb-rule-engine
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-node.env
     volumes:
@@ -161,7 +157,6 @@ services:
     environment:
       TB_SERVICE_ID: tb-ie1
       TB_SERVICE_TYPE: tb-integration-executor
-      JAVA_OPTS: "${JAVA_OPTS}"
     ports:
       - "5682/udp"
       - "8082"
@@ -186,7 +181,6 @@ services:
     environment:
       TB_SERVICE_ID: tb-ie2
       TB_SERVICE_TYPE: tb-integration-executor
-      JAVA_OPTS: "${JAVA_OPTS}"
     ports:
       - "5682/udp"
       - "8082"
@@ -221,7 +215,6 @@ services:
       - "1883"
     environment:
       TB_SERVICE_ID: tb-mqtt-transport1
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-mqtt-transport.env
     volumes:
@@ -238,7 +231,6 @@ services:
       - "1883"
     environment:
       TB_SERVICE_ID: tb-mqtt-transport2
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-mqtt-transport.env
     volumes:
@@ -255,7 +247,6 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-http-transport1
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-http-transport.env
     volumes:
@@ -272,7 +263,6 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-http-transport2
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-http-transport.env
     volumes:
@@ -289,7 +279,6 @@ services:
       - "5683:5683/udp"
     environment:
       TB_SERVICE_ID: tb-coap-transport
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-coap-transport.env
     volumes:
@@ -309,7 +298,6 @@ services:
       - "5688:5688/udp"
     environment:
       TB_SERVICE_ID: tb-lwm2m-transport
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-lwm2m-transport.env
     volumes:
@@ -326,7 +314,6 @@ services:
       - "1620:1620/udp"
     environment:
       TB_SERVICE_ID: tb-snmp-transport
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-snmp-transport.env
     volumes:
@@ -357,7 +344,6 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-vc-executor1
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-vc-executor.env
     volumes:
@@ -374,7 +360,6 @@ services:
       - "8081"
     environment:
       TB_SERVICE_ID: tb-vc-executor2
-      JAVA_OPTS: "${JAVA_OPTS}"
     env_file:
       - ../config-env/tb-vc-executor.env
     volumes:
