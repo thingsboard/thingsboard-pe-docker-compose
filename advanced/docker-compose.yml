@@ -61,6 +61,7 @@ services:
     environment:
       TB_SERVICE_ID: tb-core1
       TB_SERVICE_TYPE: tb-core
+      TB_LICENSE_INSTANCE_DATA_FILE: "/data/instance-license-tb-core1.data"
       EDGES_ENABLED: "true"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
@@ -89,6 +90,7 @@ services:
     environment:
       TB_SERVICE_ID: tb-core2
       TB_SERVICE_TYPE: tb-core
+      TB_LICENSE_INSTANCE_DATA_FILE: "/data/instance-license-tb-core2.data"
       EDGES_ENABLED: "true"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
     env_file:
@@ -115,6 +117,7 @@ services:
     environment:
       TB_SERVICE_ID: tb-rule-engine1
       TB_SERVICE_TYPE: tb-rule-engine
+      TB_LICENSE_INSTANCE_DATA_FILE: "/data/instance-license-tb-rule-engine1.data"
     env_file:
       - ../config-env/tb-node.env
     volumes:
@@ -137,6 +140,7 @@ services:
     environment:
       TB_SERVICE_ID: tb-rule-engine2
       TB_SERVICE_TYPE: tb-rule-engine
+      TB_LICENSE_INSTANCE_DATA_FILE: "/data/instance-license-tb-rule-engine2.data"
     env_file:
       - ../config-env/tb-node.env
     volumes:

@@ -67,6 +67,7 @@ services:
     environment:
       TB_SERVICE_ID: tb-monolith
       TB_SERVICE_TYPE: monolith
+      TB_LICENSE_INSTANCE_DATA_FILE: "/data/instance-license-tb-monolith.data"
       EDGES_ENABLED: "true"
     env_file:
       - ../config-env/tb-node.env
