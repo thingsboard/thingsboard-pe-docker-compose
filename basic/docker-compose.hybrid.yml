@@ -1,5 +1,5 @@
 #
-# Copyright © 2016-2020 The Thingsboard Authors
+# Copyright © 2016-2025 The Thingsboard Authors
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -27,8 +27,6 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-version: '3.0'
-
 services:
   postgres:
     restart: always
@@ -49,7 +47,7 @@ services:
       - ../tb-node/cassandra:/var/lib/cassandra
   tb-monolith:
     env_file:
-      - ../tb-node.hybrid.env
+      - ../config-env/tb-node.hybrid.env
     depends_on:
       - postgres
       - cassandra
