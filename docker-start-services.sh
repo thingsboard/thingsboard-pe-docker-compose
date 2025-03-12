@@ -48,8 +48,6 @@ ADDITIONAL_COMPOSE_EDQS_ARGS=$(additionalComposeEdqsArgs) || exit $?
 
 ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
 
-checkFolders --create || exit $?
-
 cd $DEPLOYMENT_FOLDER
 
 COMPOSE_ARGS="\
