@@ -67,8 +67,6 @@ ADDITIONAL_COMPOSE_JAVA_ARGS=$(additionalComposeJavaArgs) || exit $?
 
 ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
 
-checkFolders --create || exit $?
-
 cd $DEPLOYMENT_FOLDER
 
 COMPOSE_ARGS_PULL="\

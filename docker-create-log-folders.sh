@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
@@ -31,4 +32,4 @@
 
 set -e
 source compose-utils.sh
-checkFolders --create
+checkFolders --create "$@"
