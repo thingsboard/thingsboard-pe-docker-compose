@@ -2,7 +2,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2022 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2025 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -70,6 +70,8 @@ ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
 ADDITIONAL_COMPOSE_EDQS_ARGS=$(additionalComposeEdqsArgs) || exit $?
 
+ADDITIONAL_COMPOSE_JAVA_ARGS=$(additionalComposeJavaArgs) || exit $?
+
 ADDITIONAL_STARTUP_SERVICES=$(additionalStartupServices) || exit $?
 
 cd $DEPLOYMENT_FOLDER
@@ -78,7 +80,7 @@ if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
 
     COMPOSE_ARGS="\
           --env-file ../.env \
-          -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
+          -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} ${ADDITIONAL_COMPOSE_JAVA_ARGS} \
           up -d ${ADDITIONAL_STARTUP_SERVICES}"
 
     case $COMPOSE_VERSION in

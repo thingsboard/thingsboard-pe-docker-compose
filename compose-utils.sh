@@ -2,7 +2,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2022 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2025 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -159,6 +159,26 @@ function additionalComposeEdqsArgs() {
     else
       echo ""
     fi
+}
+
+function additionalComposeJavaArgs() {
+    source .env
+
+    case $JVM_MEMORY_OPTS in
+        none)
+        ADDITIONAL_COMPOSE_JAVA_ARGS=""
+        ;;
+        shared)
+        ADDITIONAL_COMPOSE_JAVA_ARGS="-f docker-compose.mem-opts.shared.yml"
+        ;;
+        dedicated)
+        ADDITIONAL_COMPOSE_JAVA_ARGS="-f docker-compose.mem-opts.dedicated.yml"
+        ;;
+        *)
+        echo "Unknown JVM_MEMORY_OPTS value specified in the .env file: '${JVM_MEMORY_OPTS}'. Should be either 'none' or 'shared' or 'dedicated'." >&2
+        exit 1
+    esac
+    echo $ADDITIONAL_COMPOSE_JAVA_ARGS
 }
 
 function additionalStartupServices() {

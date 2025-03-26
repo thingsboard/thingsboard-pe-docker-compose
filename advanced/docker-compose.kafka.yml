@@ -1,7 +1,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2025 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -29,8 +29,6 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-version: '3.0'
-
 services:
   kafka:
     restart: always
@@ -38,86 +36,86 @@ services:
     ports:
       - "9092:9092"
     env_file:
-      - ../kafka.env
+      - ../config-env/kafka.env
     depends_on:
       - zookeeper
   tb-js-executor:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-core1:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-core2:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-rule-engine1:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-rule-engine2:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-mqtt-transport1:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-mqtt-transport2:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-http-transport1:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-http-transport2:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-coap-transport:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-lwm2m-transport:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-snmp-transport:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-vc-executor1:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-vc-executor2:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-integration-executor1:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
   tb-integration-executor2:
     env_file:
-      - ../queue-kafka.env
+      - ../config-env/queue-kafka.env
     depends_on:
       - kafka
