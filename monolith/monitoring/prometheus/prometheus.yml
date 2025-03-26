@@ -50,8 +50,10 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
      - targets: ['localhost:9090']
+#     - targets: ['172.17.0.1:9090']
 
   - job_name: 'tb-monolith'
     metrics_path: /actuator/prometheus
     static_configs:
       - targets: [ 'tb-monolith:8080' ]
+#      - targets: [ '172.17.0.1:8080' ]
