@@ -205,6 +205,7 @@ function permissionList() {
       799  799  tb-transports/coap/log
       799  799  tb-vc-executor/log
       999  999  tb-node/postgres
+      799  799  tb-report/log
       "
 
     PERMISSION_LIST="$PERMISSION_LIST
@@ -222,7 +223,7 @@ function permissionList() {
 
     if [ "$EDQS_ENABLED" = true ]; then
       PERMISSION_LIST="$PERMISSION_LIST
-      799  799  edqs/log
+      799  799  tb-edqs/log
       "
     fi
 
