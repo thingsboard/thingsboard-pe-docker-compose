@@ -105,3 +105,13 @@ scrape_configs:
     metrics_path: /actuator/prometheus
     static_configs:
       - targets: [ 'tb-snmp-transport:8081' ]
+
+  - job_name: 'tb-report1'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'tb-report1:8081' ]
+
+  - job_name: 'tb-report2'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [ 'tb-report2:8081' ]

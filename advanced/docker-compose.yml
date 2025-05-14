@@ -66,6 +66,7 @@ services:
       EDGES_ENABLED: "true"
       JAVA_OPTS: "${JAVA_OPTS}"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
+      TB_REPORT_SERVICE_MODE: remote
     env_file:
       - ../tb-node.env
     volumes:
@@ -95,6 +96,7 @@ services:
       EDGES_ENABLED: "true"
       JAVA_OPTS: "${JAVA_OPTS}"
       TB_SERVICE_INTEGRATIONS_SUPPORTED: NONE
+      TB_REPORT_SERVICE_MODE: remote
     env_file:
       - ../tb-node.env
     volumes:
@@ -202,6 +204,28 @@ services:
       - tb-js-executor
       - tb-core1
       - tb-core2
+  tb-report1:
+    restart: always
+    image: "${DOCKER_REPO}/${REPORT_DOCKER_NAME}:${TB_VERSION}"
+    environment:
+      TB_SERVICE_ID: tb-report1
+      JAVA_OPTS: "${JAVA_OPTS}"
+    env_file:
+      - ../tb-report.env
+    volumes:
+      - ../tb-report/conf:/usr/share/tb-report/conf
+      - ../tb-report/log:/var/log/tb-report
+  tb-report2:
+    restart: always
+    image: "${DOCKER_REPO}/${REPORT_DOCKER_NAME}:${TB_VERSION}"
+    environment:
+      TB_SERVICE_ID: tb-report2
+      JAVA_OPTS: "${JAVA_OPTS}"
+    env_file:
+      - ../tb-report.env
+    volumes:
+      - ../tb-report/conf:/usr/share/tb-report/conf
+      - ../tb-report/log:/var/log/tb-report
   tb-web-report1:
     restart: always
     image: "${DOCKER_REPO}/${WEB_REPORT_DOCKER_NAME}:${TB_VERSION}"
