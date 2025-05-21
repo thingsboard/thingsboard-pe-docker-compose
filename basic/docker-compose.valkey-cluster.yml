@@ -32,105 +32,106 @@
 version: '3.0'
 
 services:
-# Redis cluster
-# The latest version of Redis compatible with ThingsBoard is 7.2
-  redis-node-0:
+# Valkey cluster
+# The latest version of Valkey compatible with ThingsBoard is 8.0
+  valkey-node-0:
     image: bitnami/valkey-cluster:8.0
     volumes:
-      - ../tb-node/redis-cluster-data-0:/bitnami/redis/data
+      - ../tb-node/valkey-cluster-data-0:/bitnami/valkey/data
     environment:
       - 'VALKEY_PASSWORD=thingsboard'
-      - 'VALKEY_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
 
-  redis-node-1:
+  valkey-node-1:
     image: bitnami/valkey-cluster:8.0
     volumes:
-      - ../tb-node/redis-cluster-data-1:/bitnami/redis/data
+      - ../tb-node/valkey-cluster-data-1:/bitnami/valkey/data
     depends_on:
-      - redis-node-0
+      - valkey-node-0
     environment:
       - 'VALKEY_PASSWORD=thingsboard'
-      - 'VALKEY_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
 
-  redis-node-2:
+  valkey-node-2:
     image: bitnami/valkey-cluster:8.0
     volumes:
-      - ../tb-node/redis-cluster-data-2:/bitnami/redis/data
+      - ../tb-node/valkey-cluster-data-2:/bitnami/valkey/data
     depends_on:
-      - redis-node-1
+      - valkey-node-1
     environment:
       - 'VALKEY_PASSWORD=thingsboard'
-      - 'VALKEY_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
 
-  redis-node-3:
+  valkey-node-3:
     image: bitnami/valkey-cluster:8.0
     volumes:
-      - ../tb-node/redis-cluster-data-3:/bitnami/redis/data
+      - ../tb-node/valkey-cluster-data-3:/bitnami/valkey/data
     depends_on:
-      - redis-node-2
+      - valkey-node-2
     environment:
       - 'VALKEY_PASSWORD=thingsboard'
-      - 'VALKEY_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
 
-  redis-node-4:
+  valkey-node-4:
     image: bitnami/valkey-cluster:8.0
     volumes:
-      - ../tb-node/redis-cluster-data-4:/bitnami/redis/data
+      - ../tb-node/valkey-cluster-data-4:/bitnami/valkey/data
     depends_on:
-      - redis-node-3
+      - valkey-node-3
     environment:
       - 'VALKEY_PASSWORD=thingsboard'
-      - 'VALKEY_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
 
-  redis-node-5:
+  valkey-node-5:
     image: bitnami/valkey-cluster:8.0
     volumes:
-      - ../tb-node/redis-cluster-data-5:/bitnami/redis/data
+      - ../tb-node/valkey-cluster-data-5:/bitnami/valkey/data
     depends_on:
-      - redis-node-0
-      - redis-node-1
-      - redis-node-2
-      - redis-node-3
-      - redis-node-4
+      - valkey-node-0
+      - valkey-node-1
+      - valkey-node-2
+      - valkey-node-3
+      - valkey-node-4
     environment:
       - 'VALKEY_PASSWORD=thingsboard'
-      - 'VALKEY_NODES=redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5'
+      - 'REDISCLI_AUTH=thingsboard'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
       - 'VALKEY_CLUSTER_REPLICAS=1'
       - 'VALKEY_CLUSTER_CREATOR=yes'
 
-# ThingsBoard setup to use redis-cluster
+# ThingsBoard setup to use valkey-cluster
   tb-monolith:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../cache-valkey-cluster.env
     depends_on:
-      - redis-node-5
+      - valkey-node-5
   tb-mqtt-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../cache-valkey-cluster.env
     depends_on:
-      - redis-node-5
+      - valkey-node-5
   tb-http-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../cache-valkey-cluster.env
     depends_on:
-      - redis-node-5
+      - valkey-node-5
   tb-coap-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../cache-valkey-cluster.env
     depends_on:
-      - redis-node-5
+      - valkey-node-5
   tb-lwm2m-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../cache-valkey-cluster.env
     depends_on:
-      - redis-node-5
+      - valkey-node-5
   tb-snmp-transport:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../cache-valkey-cluster.env
     depends_on:
-      - redis-node-5
+      - valkey-node-5
   tb-vc-executor:
     env_file:
-      - ../cache-redis-cluster.env
+      - ../cache-valkey-cluster.env
     depends_on:
-      - redis-node-5
+      - valkey-node-5

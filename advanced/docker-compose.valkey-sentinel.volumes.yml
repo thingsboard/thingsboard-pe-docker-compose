@@ -32,44 +32,24 @@
 version: '3.0'
 
 services:
-  # Redis sentinel
-  # The latest version of Redis compatible with ThingsBoard is 7.2
-  redis-master:
-    image: 'bitnami/redis:7.2'
+  # Valkey sentinel
+  valkey-primary:
     volumes:
-      - ../tb-node/redis-sentinel-data-master:/bitnami/redis/data
-    environment:
-      - 'REDIS_REPLICATION_MODE=master'
-      - 'REDIS_PASSWORD=thingsboard'
-
-  redis-slave:
-    image: 'bitnami/redis:7.2'
+      - valkey-sentinel-data-primary:/bitnami/valkey/data
+  valkey-replica:
     volumes:
-      - ../tb-node/redis-sentinel-data-slave:/bitnami/redis/data
-    environment:
-      - 'REDIS_REPLICATION_MODE=slave'
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
-      - 'REDIS_PASSWORD=thingsboard'
-    depends_on:
-      - redis-master
-
-  redis-sentinel:
-    image: 'bitnami/redis-sentinel:7.2'
+      - valkey-sentinel-data-replica:/bitnami/valkey/data
+  valkey-sentinel:
     volumes:
-      - ../tb-node/redis-sentinel-data-sentinel:/bitnami/redis/data
-    environment:
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_SET=mymaster'
-      - 'REDIS_SENTINEL_PASSWORD=sentinel'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
-    depends_on:
-      - redis-master
-      - redis-slave
+      - valkey-sentinel-data-sentinel:/bitnami/valkey/data
 
-# ThingsBoard setup to use redis-sentinel
-  tb-monolith:
-    env_file:
-      - ../cache-redis-sentinel.env
-    depends_on:
-      - redis-sentinel
+volumes:
+  valkey-sentinel-data-primary:
+    external:
+      name: ${VALKEY_SENTINEL_DATA_VOLUME_MASTER}
+  valkey-sentinel-data-replica:
+    external:
+      name: ${VALKEY_SENTINEL_DATA_VOLUME_SLAVE}
+  valkey-sentinel-data-sentinel:
+    external:
+      name: ${VALKEY_SENTINEL_DATA_VOLUME_SENTINEL}

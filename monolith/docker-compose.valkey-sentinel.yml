@@ -32,24 +32,44 @@
 version: '3.0'
 
 services:
-  # Redis sentinel
-  redis-master:
+  # Valkey sentinel
+  # The latest version of valkey compatible with ThingsBoard is 8.0
+  valkey-primary:
+    image: 'bitnami/valkey:8.0'
     volumes:
-      - redis-sentinel-data-master:/bitnami/redis/data
-  redis-slave:
-    volumes:
-      - redis-sentinel-data-slave:/bitnami/redis/data
-  redis-sentinel:
-    volumes:
-      - redis-sentinel-data-sentinel:/bitnami/redis/data
+      - ../tb-node/valkey-sentinel-data-primary:/bitnami/valkey/data
+    environment:
+      - 'VALKEY_REPLICATION_MODE=primary'
+      - 'VALKEY_PASSWORD=thingsboard'
 
-volumes:
-  redis-sentinel-data-master:
-    external:
-      name: ${REDIS_SENTINEL_DATA_VOLUME_MASTER}
-  redis-sentinel-data-slave:
-    external:
-      name: ${REDIS_SENTINEL_DATA_VOLUME_SLAVE}
-  redis-sentinel-data-sentinel:
-    external:
-      name: ${REDIS_SENTINEL_DATA_VOLUME_SENTINEL}
+  valkey-replica:
+    image: 'bitnami/valkey:8.0'
+    volumes:
+      - ../tb-node/valkey-sentinel-data-replica:/bitnami/valkey/data
+    environment:
+      - 'VALKEY_REPLICATION_MODE=replica'
+      - 'VALKEY_PRIMARY_HOST=valkey-primary'
+      - 'VALKEY_PRIMARY_PASSWORD=thingsboard'
+      - 'VALKEY_PASSWORD=thingsboard'
+    depends_on:
+      - valkey-primary
+
+  valkey-sentinel:
+    image: 'bitnami/valkey-sentinel:8.0'
+    volumes:
+      - ../tb-node/valkey-sentinel-data-sentinel:/bitnami/valkey/data
+    environment:
+      - 'VALKEY_PRIMARY_HOST=valkey-primary'
+      - 'VALKEY_PRIMARY_SET=myprimary'
+      - 'VALKEY_SENTINEL_PASSWORD=sentinel'
+      - 'VALKEY_PRIMARY_PASSWORD=thingsboard'
+    depends_on:
+      - valkey-primary
+      - valkey-replica
+
+# ThingsBoard setup to use valkey-sentinel
+  tb-monolith:
+    env_file:
+      - ../cache-valkey-sentinel.env
+    depends_on:
+      - valkey-sentinel

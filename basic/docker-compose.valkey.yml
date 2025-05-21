@@ -32,42 +32,52 @@
 version: '3.0'
 
 services:
-  # Redis cluster
-  redis-node-0:
+# Valkey standalone
+# The latest version of Valkey compatible with ThingsBoard is 8.0
+  valkey:
+    restart: always
+    image: bitnami/valkey:8.0
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - '6379:6379'
     volumes:
-      - redis-cluster-data-0:/bitnami/redis/data
-  redis-node-1:
-    volumes:
-      - redis-cluster-data-1:/bitnami/redis/data
-  redis-node-2:
-    volumes:
-      - redis-cluster-data-2:/bitnami/redis/data
-  redis-node-3:
-    volumes:
-      - redis-cluster-data-3:/bitnami/redis/data
-  redis-node-4:
-    volumes:
-      - redis-cluster-data-4:/bitnami/redis/data
-  redis-node-5:
-    volumes:
-      - redis-cluster-data-5:/bitnami/redis/data
+      - ../tb-node/valkey-data:/bitnami/valkey/data
 
-volumes:
-  redis-cluster-data-0:
-    external:
-      name: ${REDIS_CLUSTER_DATA_VOLUME_0}
-  redis-cluster-data-1:
-    external:
-      name: ${REDIS_CLUSTER_DATA_VOLUME_1}
-  redis-cluster-data-2:
-    external:
-      name: ${REDIS_CLUSTER_DATA_VOLUME_2}
-  redis-cluster-data-3:
-    external:
-      name: ${REDIS_CLUSTER_DATA_VOLUME_3}
-  redis-cluster-data-4:
-    external:
-      name: ${REDIS_CLUSTER_DATA_VOLUME_4}
-  redis-cluster-data-5:
-    external:
-      name: ${REDIS_CLUSTER_DATA_VOLUME_5}
+# ThingsBoard setup to use valkey-standalone
+  tb-monolith:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-mqtt-transport:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-http-transport:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-coap-transport:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-lwm2m-transport:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-snmp-transport:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-vc-executor:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
