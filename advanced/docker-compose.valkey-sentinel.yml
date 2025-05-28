@@ -52,7 +52,7 @@ services:
       - 'VALKEY_PRIMARY_PASSWORD=thingsboard'
       - 'VALKEY_PASSWORD=thingsboard'
     depends_on:
-     - valkey-primary
+      - valkey-primary
 
   valkey-sentinel:
     image: 'bitnami/valkey-sentinel:8.0'
