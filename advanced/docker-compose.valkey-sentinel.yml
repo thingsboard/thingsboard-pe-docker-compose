@@ -32,104 +32,104 @@
 version: '3.0'
 
 services:
-  # Redis sentinel
-  # The latest version of Redis compatible with ThingsBoard is 7.2
-  redis-master:
-    image: 'bitnami/redis:7.2'
+  # Valkey sentinel
+  # The latest version of Valkey compatible with ThingsBoard is 8.0
+  valkey-primary:
+    image: 'bitnami/valkey:8.0'
     volumes:
-      - ../tb-node/redis-sentinel-data-master:/bitnami/redis/data
+      - ../tb-node/valkey-sentinel-data-primary:/bitnami/valkey/data
     environment:
-      - 'REDIS_REPLICATION_MODE=master'
-      - 'REDIS_PASSWORD=thingsboard'
+      - 'VALKEY_REPLICATION_MODE=primary'
+      - 'VALKEY_PASSWORD=thingsboard'
 
-  redis-slave:
-    image: 'bitnami/redis:7.2'
+  valkey-replica:
+    image: 'bitnami/valkey:8.0'
     volumes:
-      - ../tb-node/redis-sentinel-data-slave:/bitnami/redis/data
+      - ../tb-node/valkey-sentinel-data-perlica:/bitnami/valkey/data
     environment:
-      - 'REDIS_REPLICATION_MODE=slave'
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
-      - 'REDIS_PASSWORD=thingsboard'
+      - 'VALKEY_REPLICATION_MODE=replica'
+      - 'VALKEY_PRIMARY_HOST=valkey-primary'
+      - 'VALKEY_PRIMARY_PASSWORD=thingsboard'
+      - 'VALKEY_PASSWORD=thingsboard'
     depends_on:
-      - redis-master
+      - valkey-primary
 
-  redis-sentinel:
-    image: 'bitnami/redis-sentinel:7.2'
+  valkey-sentinel:
+    image: 'bitnami/valkey-sentinel:8.0'
     volumes:
-      - ../tb-node/redis-sentinel-data-sentinel:/bitnami/redis/data
+      - ../tb-node/valkey-sentinel-data-sentinel:/bitnami/valkey/data
     environment:
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_SET=mymaster'
-      - 'REDIS_SENTINEL_PASSWORD=sentinel'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
+      - 'VALKEY_PRIMARY_HOST=valkey-primary'
+      - 'VALKEY_PRIMARY_SET=myprimary'
+      - 'VALKEY_SENTINEL_PASSWORD=sentinel'
+      - 'VALKEY_PRIMARY_PASSWORD=thingsboard'
     depends_on:
-      - redis-master
-      - redis-slave
+      - valkey-primary
+      - valkey-replica
 
-  # ThingsBoard setup to use redis-sentinel
+  # ThingsBoard setup to use valkey-sentinel
   tb-core1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-core2:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-rule-engine1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-rule-engine2:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-mqtt-transport1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-mqtt-transport2:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-http-transport1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-http-transport2:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-coap-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-lwm2m-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-snmp-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-vc-executor1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel
   tb-vc-executor2:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey-sentinel.env
     depends_on:
-      - redis-sentinel
+      - valkey-sentinel

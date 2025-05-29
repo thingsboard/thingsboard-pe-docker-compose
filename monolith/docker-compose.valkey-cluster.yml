@@ -1,0 +1,107 @@
+#
+# ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
+#
+# Copyright © 2016-2019 ThingsBoard, Inc. All Rights Reserved.
+#
+# NOTICE: All information contained herein is, and remains
+# the property of ThingsBoard, Inc. and its suppliers,
+# if any.  The intellectual and technical concepts contained
+# herein are proprietary to ThingsBoard, Inc.
+# and its suppliers and may be covered by U.S. and Foreign Patents,
+# patents in process, and are protected by trade secret or copyright law.
+#
+# Dissemination of this information or reproduction of this material is strictly forbidden
+# unless prior written permission is obtained from COMPANY.
+#
+# Access to the source code contained herein is hereby forbidden to anyone except current COMPANY employees,
+# managers or contractors who have executed Confidentiality and Non-disclosure agreements
+# explicitly covering such access.
+#
+# The copyright notice above does not evidence any actual or intended publication
+# or disclosure  of  this source code, which includes
+# information that is confidential and/or proprietary, and is a trade secret, of  COMPANY.
+# ANY REPRODUCTION, MODIFICATION, DISTRIBUTION, PUBLIC  PERFORMANCE,
+# OR PUBLIC DISPLAY OF OR THROUGH USE  OF THIS  SOURCE CODE  WITHOUT
+# THE EXPRESS WRITTEN CONSENT OF COMPANY IS STRICTLY PROHIBITED,
+# AND IN VIOLATION OF APPLICABLE LAWS AND INTERNATIONAL TREATIES.
+# THE RECEIPT OR POSSESSION OF THIS SOURCE CODE AND/OR RELATED INFORMATION
+# DOES NOT CONVEY OR IMPLY ANY RIGHTS TO REPRODUCE, DISCLOSE OR DISTRIBUTE ITS CONTENTS,
+# OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
+#
+
+version: '3.0'
+
+services:
+# Valkey cluster
+# The latest version of Valkey compatible with ThingsBoard is 8.0
+  valkey-node-0:
+    image: bitnami/valkey-cluster:8.0
+    volumes:
+      - ../tb-node/valkey-cluster-data-0:/bitnami/valkey/data
+    environment:
+      - 'VALKEY_PASSWORD=thingsboard'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
+
+  valkey-node-1:
+    image: bitnami/valkey-cluster:8.0
+    volumes:
+      - ../tb-node/valkey-cluster-data-1:/bitnami/valkey/data
+    depends_on:
+      - valkey-node-0
+    environment:
+      - 'VALKEY_PASSWORD=thingsboard'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
+
+  valkey-node-2:
+    image: bitnami/valkey-cluster:8.0
+    volumes:
+      - ../tb-node/valkey-cluster-data-2:/bitnami/valkey/data
+    depends_on:
+      - valkey-node-1
+    environment:
+      - 'VALKEY_PASSWORD=thingsboard'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
+
+  valkey-node-3:
+    image: bitnami/valkey-cluster:8.0
+    volumes:
+      - ../tb-node/valkey-cluster-data-3:/bitnami/valkey/data
+    depends_on:
+      - valkey-node-2
+    environment:
+      - 'VALKEY_PASSWORD=thingsboard'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
+
+  valkey-node-4:
+    image: bitnami/valkey-cluster:8.0
+    volumes:
+      - ../tb-node/valkey-cluster-data-4:/bitnami/valkey/data
+    depends_on:
+      - valkey-node-3
+    environment:
+      - 'VALKEY_PASSWORD=thingsboard'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
+
+  valkey-node-5:
+    image: bitnami/valkey-cluster:8.0
+    volumes:
+      - ../tb-node/valkey-cluster-data-5:/bitnami/valkey/data
+    depends_on:
+      - valkey-node-0
+      - valkey-node-1
+      - valkey-node-2
+      - valkey-node-3
+      - valkey-node-4
+    environment:
+      - 'VALKEY_PASSWORD=thingsboard'
+      - 'REDISCLI_AUTH=thingsboard'
+      - 'VALKEY_NODES=valkey-node-0 valkey-node-1 valkey-node-2 valkey-node-3 valkey-node-4 valkey-node-5'
+      - 'VALKEY_CLUSTER_REPLICAS=1'
+      - 'VALKEY_CLUSTER_CREATOR=yes'
+
+# ThingsBoard setup to use valkey-cluster
+  tb-monolith:
+    env_file:
+      - ../cache-valkey-cluster.env
+    depends_on:
+      - valkey-node-5
