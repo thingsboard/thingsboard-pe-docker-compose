@@ -32,80 +32,92 @@
 version: '3.0'
 
 services:
-  # Redis sentinel
-  # The latest version of Redis compatible with ThingsBoard is 7.2
-  redis-master:
-    image: 'bitnami/redis:7.2'
-    volumes:
-      - ../tb-node/redis-sentinel-data-master:/bitnami/redis/data
+# Valkey standalone
+# The latest version of Valkey compatible with ThingsBoard is 8.0
+  valkey:
+    restart: always
+    image: bitnami/valkey:8.0
     environment:
-      - 'REDIS_REPLICATION_MODE=master'
-      - 'REDIS_PASSWORD=thingsboard'
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - '6379'
-
-  redis-slave:
-    image: 'bitnami/redis:7.2'
+      - '6379:6379'
     volumes:
-      - ../tb-node/redis-sentinel-data-slave:/bitnami/redis/data
-    environment:
-      - 'REDIS_REPLICATION_MODE=slave'
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
-      - 'REDIS_PASSWORD=thingsboard'
-    depends_on:
-      - redis-master
-    ports:
-      - '6379'
+      - ../tb-node/valkey-data:/bitnami/valkey/data
 
-  redis-sentinel:
-    image: 'bitnami/redis-sentinel:7.2'
-    volumes:
-      - ../tb-node/redis-sentinel-data-sentinel:/bitnami/redis/data
-    environment:
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_SET=mymaster'
-      - 'REDIS_SENTINEL_PASSWORD=sentinel'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
-    depends_on:
-      - redis-master
-      - redis-slave
-    ports:
-      - '26379'
-
-# ThingsBoard setup to use redis-sentinel
-  tb-monolith:
+# ThingsBoard setup to use valkey-standalone
+  tb-core1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
-  tb-mqtt-transport:
+      - valkey
+  tb-core2:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
-  tb-http-transport:
+      - valkey
+  tb-rule-engine1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
+      - valkey
+  tb-rule-engine2:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-mqtt-transport1:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-mqtt-transport2:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-http-transport1:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-http-transport2:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
   tb-coap-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
+      - valkey
   tb-lwm2m-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
+      - valkey
   tb-snmp-transport:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
-  tb-vc-executor:
+      - valkey
+  tb-vc-executor1:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
+      - valkey
+  tb-vc-executor2:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-integration-executor1:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey
+  tb-integration-executor2:
+    env_file:
+      - ../cache-valkey.env
+    depends_on:
+      - valkey

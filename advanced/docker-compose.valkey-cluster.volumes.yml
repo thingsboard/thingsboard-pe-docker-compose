@@ -32,52 +32,42 @@
 version: '3.0'
 
 services:
-# Redis standalone
-# The latest version of Redis compatible with ThingsBoard is 7.2
-  redis:
-    restart: always
-    image: bitnami/valkey:8.0
-    environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      ALLOW_EMPTY_PASSWORD: "yes"
-    ports:
-      - '6379:6379'
+  # Valkey cluster
+  valkey-node-0:
     volumes:
-      - ../tb-node/redis-data:/bitnami/redis/data
+      - valkey-cluster-data-0:/bitnami/valkey/data
+  valkey-node-1:
+    volumes:
+      - valkey-cluster-data-1:/bitnami/valkey/data
+  valkey-node-2:
+    volumes:
+      - valkey-cluster-data-2:/bitnami/valkey/data
+  valkey-node-3:
+    volumes:
+      - valkey-cluster-data-3:/bitnami/valkey/data
+  valkey-node-4:
+    volumes:
+      - valkey-cluster-data-4:/bitnami/valkey/data
+  valkey-node-5:
+    volumes:
+      - valkey-cluster-data-5:/bitnami/valkey/data
 
-# ThingsBoard setup to use redis-standalone
-  tb-monolith:
-    env_file:
-      - ../cache-redis.env
-    depends_on:
-      - redis
-  tb-mqtt-transport:
-    env_file:
-      - ../cache-redis.env
-    depends_on:
-      - redis
-  tb-http-transport:
-    env_file:
-      - ../cache-redis.env
-    depends_on:
-      - redis
-  tb-coap-transport:
-    env_file:
-      - ../cache-redis.env
-    depends_on:
-      - redis
-  tb-lwm2m-transport:
-    env_file:
-      - ../cache-redis.env
-    depends_on:
-      - redis
-  tb-snmp-transport:
-    env_file:
-      - ../cache-redis.env
-    depends_on:
-      - redis
-  tb-vc-executor:
-    env_file:
-      - ../cache-redis.env
-    depends_on:
-      - redis
+volumes:
+  valkey-cluster-data-0:
+    external:
+      name: ${VALKEY_CLUSTER_DATA_VOLUME_0}
+  valkey-cluster-data-1:
+    external:
+      name: ${VALKEY_CLUSTER_DATA_VOLUME_1}
+  valkey-cluster-data-2:
+    external:
+      name: ${VALKEY_CLUSTER_DATA_VOLUME_2}
+  valkey-cluster-data-3:
+    external:
+      name: ${VALKEY_CLUSTER_DATA_VOLUME_3}
+  valkey-cluster-data-4:
+    external:
+      name: ${VALKEY_CLUSTER_DATA_VOLUME_4}
+  valkey-cluster-data-5:
+    external:
+      name: ${VALKEY_CLUSTER_DATA_VOLUME_5}

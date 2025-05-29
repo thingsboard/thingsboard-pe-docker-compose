@@ -32,24 +32,24 @@
 version: '3.0'
 
 services:
-  # Redis sentinel
-  redis-master:
+  # Valkey sentinel
+  valkey-primary:
     volumes:
-      - redis-sentinel-data-master:/bitnami/redis/data
-  redis-slave:
+      - valkey-sentinel-data-primary:/bitnami/valkey/data
+  valkey-replica:
     volumes:
-      - redis-sentinel-data-slave:/bitnami/redis/data
-  redis-sentinel:
+      - valkey-sentinel-data-replica:/bitnami/valkey/data
+  valkey-sentinel:
     volumes:
-      - redis-sentinel-data-sentinel:/bitnami/redis/data
+      - valkey-sentinel-data-sentinel:/bitnami/valkey/data
 
 volumes:
-  redis-sentinel-data-master:
+  valkey-sentinel-data-primary:
     external:
-      name: ${REDIS_SENTINEL_DATA_VOLUME_MASTER}
-  redis-sentinel-data-slave:
+      name: ${VALKEY_SENTINEL_DATA_VOLUME_PRIMARY}
+  valkey-sentinel-data-replica:
     external:
-      name: ${REDIS_SENTINEL_DATA_VOLUME_SLAVE}
-  redis-sentinel-data-sentinel:
+      name: ${VALKEY_SENTINEL_DATA_VOLUME_REPLICA}
+  valkey-sentinel-data-sentinel:
     external:
-      name: ${REDIS_SENTINEL_DATA_VOLUME_SENTINEL}
+      name: ${VALKEY_SENTINEL_DATA_VOLUME_SENTINEL}

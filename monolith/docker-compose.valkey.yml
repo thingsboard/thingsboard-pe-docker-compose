@@ -32,44 +32,22 @@
 version: '3.0'
 
 services:
-  # Redis sentinel
-  # The latest version of Redis compatible with ThingsBoard is 7.2
-  redis-master:
-    image: 'bitnami/redis:7.2'
-    volumes:
-      - ../tb-node/redis-sentinel-data-master:/bitnami/redis/data
+# Valkey standalone
+# The latest version of Valkey compatible with ThingsBoard is 8.0
+  valkey:
+    restart: always
+    image: bitnami/valkey:8.0
     environment:
-      - 'REDIS_REPLICATION_MODE=master'
-      - 'REDIS_PASSWORD=thingsboard'
-
-  redis-slave:
-    image: 'bitnami/redis:7.2'
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - '6379:6379'
     volumes:
-      - ../tb-node/redis-sentinel-data-slave:/bitnami/redis/data
-    environment:
-      - 'REDIS_REPLICATION_MODE=slave'
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
-      - 'REDIS_PASSWORD=thingsboard'
-    depends_on:
-      - redis-master
+      - ../tb-node/valkey-data:/bitnami/valkey/data
 
-  redis-sentinel:
-    image: 'bitnami/redis-sentinel:7.2'
-    volumes:
-      - ../tb-node/redis-sentinel-data-sentinel:/bitnami/redis/data
-    environment:
-      - 'REDIS_MASTER_HOST=redis-master'
-      - 'REDIS_MASTER_SET=mymaster'
-      - 'REDIS_SENTINEL_PASSWORD=sentinel'
-      - 'REDIS_MASTER_PASSWORD=thingsboard'
-    depends_on:
-      - redis-master
-      - redis-slave
-
-# ThingsBoard setup to use redis-sentinel
+# ThingsBoard setup to use valkey-standalone
   tb-monolith:
     env_file:
-      - ../cache-redis-sentinel.env
+      - ../cache-valkey.env
     depends_on:
-      - redis-sentinel
+      - valkey
