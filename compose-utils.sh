@@ -149,6 +149,18 @@ function additionalComposeEdqsArgs() {
     fi
 }
 
+function additionalComposeTrendzArgs() {
+    source .env
+
+    if [ "$TRENDZ_ENABLED" = true ]
+    then
+      ADDITIONAL_COMPOSE_TRENDZ_ARGS="-f docker-compose.trendz.yml"
+      echo $ADDITIONAL_COMPOSE_TRENDZ_ARGS
+    else
+      echo ""
+    fi
+}
+
 function additionalStartupServices() {
     source .env
     ADDITIONAL_STARTUP_SERVICES=""
@@ -212,6 +224,15 @@ function permissionList() {
     if [ "$EDQS_ENABLED" = true ]; then
       PERMISSION_LIST="$PERMISSION_LIST
       799  799  tb-edqs/log
+      "
+    fi
+
+    if [ "$TRENDZ_ENABLED" = true ]; then
+      PERMISSION_LIST="$PERMISSION_LIST
+      999  999  trendz/postgres
+
+      799  799  trendz/log
+      799  799  trendz-python-executor/log
       "
     fi
 
