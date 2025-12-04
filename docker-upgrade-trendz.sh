@@ -37,28 +37,23 @@ then
     exit 1
 fi
 
-FROM_VERSION=""
-for i in "$@"; do
-    case $i in
-        --fromVersion=*)
-            FROM_VERSION="${i#*=}"
-            shift
-            ;;
-        *)
+for i in "$@"
+do
+case $i in
+    --fromVersion=*)
+    FROM_VERSION="${i#*=}"
+    shift
+    ;;
+    *)
             # unknown option
-            ;;
-    esac
+    ;;
+esac
 done
 
 fromVersion="${FROM_VERSION// }"
 
-if [[ -n "${fromVersion}" ]]; then
-    FROM_VERSION_ARGS="-e FROM_VERSION=${fromVersion}"
-else
-    FROM_VERSION_ARGS=""
-fi
-
 set -e
+
 source compose-utils.sh
 
 COMPOSE_VERSION=$(composeVersion) || exit $?
@@ -95,7 +90,7 @@ COMPOSE_ARGS_UP="\
 COMPOSE_ARGS_RUN="\
       --env-file ../.env \
       -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_TRENDZ_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
-      run --no-deps --rm -e UPGRADE_TRENDZ=true ${FROM_VERSION_ARGS} \
+      run --no-deps --rm -e UPGRADE_TRENDZ=true -e FROM_VERSION=${fromVersion} \
       ${TRENDZ_SERVICE_NAME}"
 
 case $COMPOSE_VERSION in
