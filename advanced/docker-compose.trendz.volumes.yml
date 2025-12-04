@@ -35,7 +35,7 @@ services:
       - trendz-log-volume:/var/log/trendz
   trendz-python-executor:
     volumes:
-      - trendz-python-executor-log-volume:/var/log/trendz
+      - trendz-python-executor-log-volume:/var/log/python-executor
   trendz-postgres:
     volumes:
       - trendz-postgres-db-volume:/var/lib/postgresql/data
