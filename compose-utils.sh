@@ -70,6 +70,11 @@ function mainServiceName() {
     echo $MAIN_SERVICE_NAME
 }
 
+function trendzServiceName() {
+    TRENDZ_SERVICE_NAME="trendz"
+    echo $TRENDZ_SERVICE_NAME
+}
+
 function additionalComposeArgs() {
     source .env
     ADDITIONAL_COMPOSE_ARGS=""
@@ -193,6 +198,11 @@ function additionalStartupServices() {
     esac
 
     echo $ADDITIONAL_STARTUP_SERVICES
+}
+
+function additionalTrendzStartupServices() {
+    ADDITIONAL_TRENDZ_STARTUP_SERVICES="trendz-postgres"
+    echo $ADDITIONAL_TRENDZ_STARTUP_SERVICES
 }
 
 function permissionList() {
