@@ -72,13 +72,9 @@ services:
   tb-core1:
     env_file:
       - ../tb-node.trendz.env
-    depends_on:
-      - trendz
   tb-core2:
     env_file:
       - ../tb-node.trendz.env
-    depends_on:
-      - trendz
   haproxy:
     links:
       - trendz

@@ -72,8 +72,6 @@ services:
   tb-monolith:
     env_file:
       - ../tb-node.trendz.env
-    depends_on:
-      - trendz
   haproxy:
     links:
       - trendz
