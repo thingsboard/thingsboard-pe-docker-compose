@@ -30,6 +30,28 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
+source .env
+if [ "$TRENDZ_ENABLED" != true ]
+then
+    echo "Cannot update Trendz while Trendz is disabled!"
+    exit 1
+fi
+
+for i in "$@"
+do
+case $i in
+    --fromVersion=*)
+    FROM_VERSION="${i#*=}"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+done
+
+fromVersion="${FROM_VERSION// }"
+
 set -e
 
 source compose-utils.sh
@@ -38,29 +60,49 @@ COMPOSE_VERSION=$(composeVersion) || exit $?
 
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
+TRENDZ_SERVICE_NAME=$(trendzServiceName) || exit $?
+
 ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
 
 ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
 
 ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
 
-ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
-
 ADDITIONAL_COMPOSE_TRENDZ_ARGS=$(additionalComposeTrendzArgs) || exit $?
+
+ADDITIONAL_COMPOSE_EDQS_ARGS=$(additionalComposeEdqsArgs) || exit $?
+
+ADDITIONAL_TRENDZ_STARTUP_SERVICES=$(additionalTrendzStartupServices) || exit $?
 
 cd $DEPLOYMENT_FOLDER
 
-COMPOSE_ARGS="\
+COMPOSE_ARGS_PULL="\
       --env-file ../.env \
-      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_MONITORING_ARGS} ${ADDITIONAL_COMPOSE_TRENDZ_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
-      stop"
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_TRENDZ_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
+      pull \
+      ${TRENDZ_SERVICE_NAME}"
+
+COMPOSE_ARGS_UP="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_TRENDZ_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
+      up -d ${ADDITIONAL_TRENDZ_STARTUP_SERVICES}"
+
+COMPOSE_ARGS_RUN="\
+      --env-file ../.env \
+      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_TRENDZ_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
+      run --no-deps --rm -e UPGRADE_TRENDZ=true -e FROM_VERSION=${fromVersion} \
+      ${TRENDZ_SERVICE_NAME}"
 
 case $COMPOSE_VERSION in
     V2)
-        docker compose $COMPOSE_ARGS
+        docker compose $COMPOSE_ARGS_PULL
+        docker compose $COMPOSE_ARGS_UP
+        docker compose $COMPOSE_ARGS_RUN
     ;;
     V1)
-        docker-compose $COMPOSE_ARGS
+        docker-compose $COMPOSE_ARGS_PULL
+        docker-compose $COMPOSE_ARGS_UP
+        docker-compose $COMPOSE_ARGS_RUN
     ;;
     *)
         # unknown option
