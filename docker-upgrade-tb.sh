@@ -49,7 +49,7 @@ set -e
 
 source compose-utils.sh
 
-COMPOSE_VERSION=$(composeVersion) || exit $?
+COMPOSE_CMD=$(composeCmd) || exit $?
 
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
@@ -84,20 +84,8 @@ COMPOSE_ARGS_RUN="\
       run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} \
       ${MAIN_SERVICE_NAME}"
 
-case $COMPOSE_VERSION in
-    V2)
-        docker compose $COMPOSE_ARGS_PULL
-        docker compose $COMPOSE_ARGS_UP
-        docker compose $COMPOSE_ARGS_RUN
-    ;;
-    V1)
-        docker-compose $COMPOSE_ARGS_PULL
-        docker-compose $COMPOSE_ARGS_UP
-        docker-compose $COMPOSE_ARGS_RUN
-    ;;
-    *)
-        # unknown option
-    ;;
-esac
+$COMPOSE_CMD $COMPOSE_ARGS_PULL
+$COMPOSE_CMD $COMPOSE_ARGS_UP
+$COMPOSE_CMD $COMPOSE_ARGS_RUN
 
 cd ~-

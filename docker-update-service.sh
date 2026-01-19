@@ -34,7 +34,7 @@ set -e
 
 source compose-utils.sh
 
-COMPOSE_VERSION=$(composeVersion) || exit $?
+COMPOSE_CMD=$(composeCmd) || exit $?
 
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
@@ -58,18 +58,7 @@ COMPOSE_ARGS_BUILD="\
       -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
       up -d --no-deps --build"
 
-case $COMPOSE_VERSION in
-    V2)
-        docker compose $COMPOSE_ARGS_PULL $@
-        docker compose $COMPOSE_ARGS_BUILD $@
-    ;;
-    V1)
-        docker-compose $COMPOSE_ARGS_PULL $@
-        docker-compose $COMPOSE_ARGS_BUILD $@
-    ;;
-    *)
-        # unknown option
-    ;;
-esac
+$COMPOSE_CMD $COMPOSE_ARGS_PULL $@
+$COMPOSE_CMD $COMPOSE_ARGS_BUILD $@
 
 cd ~-

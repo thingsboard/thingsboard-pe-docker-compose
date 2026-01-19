@@ -323,34 +323,19 @@ function checkFolders() {
   return $EXIT_CODE
 }
 
-function composeVersion() {
-    #Checking whether "set -e" shell option should be restored after Compose version check
-    FLAG_SET=false
-    if [[ $SHELLOPTS =~ errexit ]]; then
-        set +e
-        FLAG_SET=true
+function composeCmd()
+{    # Check Docker CLI availability
+    if ! command -v docker >/dev/null 2>&1; then
+        echo "Docker is not installed or not available in PATH. Please install Docker." >&2
+        return 1
     fi
 
-    #Checking Compose V1 availablity
-    docker-compose version >/dev/null 2>&1
-    if [ $? -eq 0 ]; then status_v1=true; else status_v1=false; fi
-
-    #Checking Compose V2 availablity
-    docker compose version >/dev/null 2>&1
-    if [ $? -eq 0 ]; then status_v2=true; else status_v2=false; fi
-
-    COMPOSE_VERSION=""
-
-    if $status_v2 ; then
-        COMPOSE_VERSION="V2"
-    elif $status_v1 ; then
-        COMPOSE_VERSION="V1"
-    else
-        echo "Docker Compose plugin is not detected. Please check your environment." >&2
-        exit 1
+    # Check Docker Compose V2 availability (plugin)
+    if ! docker compose version >/dev/null 2>&1; then
+        echo "Docker Compose V2 plugin is not detected. Your Docker installation may be outdated. Please update Docker to a version that includes Docker Compose V2." >&2
+        return 1
     fi
 
-    echo $COMPOSE_VERSION
-
-    if $FLAG_SET ; then set -e; fi
+    # Return the actual command to use
+    echo "docker compose"
 }

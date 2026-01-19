@@ -56,7 +56,7 @@ set -e
 
 source compose-utils.sh
 
-COMPOSE_VERSION=$(composeVersion) || exit $?
+COMPOSE_CMD=$(composeCmd) || exit $?
 
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
@@ -81,17 +81,7 @@ if [ ! -z "${ADDITIONAL_STARTUP_SERVICES// }" ]; then
           -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
           up -d ${ADDITIONAL_STARTUP_SERVICES}"
 
-    case $COMPOSE_VERSION in
-        V2)
-            docker compose $COMPOSE_ARGS
-        ;;
-        V1)
-            docker-compose $COMPOSE_ARGS
-        ;;
-        *)
-            # unknown option
-        ;;
-    esac
+    $COMPOSE_CMD $COMPOSE_ARGS
 fi
 
 COMPOSE_ARGS="\
@@ -100,16 +90,6 @@ COMPOSE_ARGS="\
       run --no-deps --rm -e INSTALL_TB=true -e LOAD_DEMO=${loadDemo} \
       ${MAIN_SERVICE_NAME}"
 
-case $COMPOSE_VERSION in
-    V2)
-        docker compose $COMPOSE_ARGS
-    ;;
-    V1)
-        docker-compose $COMPOSE_ARGS
-    ;;
-    *)
-        # unknown option
-    ;;
-esac
+$COMPOSE_CMD $COMPOSE_ARGS
 
 cd ~-
