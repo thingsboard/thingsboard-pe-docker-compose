@@ -49,6 +49,12 @@
         </encoder>
     </appender>
 
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="org.thingsboard.trendz" level="INFO" />
 
     <logger name="org.hibernate.engine.jdbc.spi.SqlExceptionHelper" level="WARN" />

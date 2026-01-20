@@ -49,6 +49,12 @@
         </encoder>
     </appender>
 
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="org.springframework.web.socket" level="INFO" />
     <logger name="org.thingsboard.trendz.pythonexecutor" level="INFO" />
     <logger name="org.thingsboard.trendz.pythonexecutor.service.engine.PythonScriptEngine" level="INFO" />
