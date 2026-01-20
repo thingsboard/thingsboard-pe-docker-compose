@@ -34,8 +34,6 @@ set -e
 
 source compose-utils.sh
 
-COMPOSE_CMD=$(composeCmd) || exit $?
-
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
 ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
@@ -53,6 +51,6 @@ COMPOSE_ARGS="\
       -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_MONITORING_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
       stop"
 
-$COMPOSE_CMD $COMPOSE_ARGS
+docker compose $COMPOSE_ARGS
 
 cd ~-

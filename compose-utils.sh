@@ -323,19 +323,26 @@ function checkFolders() {
   return $EXIT_CODE
 }
 
-function composeCmd()
+function checkComposeVersion()
 {    # Check Docker CLI availability
     if ! command -v docker >/dev/null 2>&1; then
         echo "Docker is not installed or not available in PATH. Please install Docker." >&2
         return 1
     fi
 
-    # Check Docker Compose V2 availability (plugin)
+    # Check Docker Compose v2+ availability (plugin)
     if ! docker compose version >/dev/null 2>&1; then
-        echo "Docker Compose V2 plugin is not detected. Your Docker installation may be outdated. Please update Docker to a version that includes Docker Compose V2." >&2
+        echo "Docker Compose v2 or newer is required. 'docker compose' (the Compose plugin) was not detected. Please update Docker to the latest version." >&2
         return 1
     fi
-
-    # Return the actual command to use
-    echo "docker compose"
+    return 0
 }
+
+# Initialize Compose command on sourcing this file
+# If the script is sourced, BASH_SOURCE[0] != $0 and we can safely `return` on failure
+if [ "${BASH_SOURCE[0]}" != "$0" ]; then
+  checkComposeVersion || return $?
+else
+  # If executed directly, run the check and exit on failure
+  checkComposeVersion || exit $?
+fi

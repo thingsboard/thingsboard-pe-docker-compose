@@ -34,8 +34,6 @@ set -e
 
 source compose-utils.sh
 
-COMPOSE_CMD=$(composeCmd) || exit $?
-
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
 ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
@@ -58,7 +56,7 @@ COMPOSE_ARGS_BUILD="\
       -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
       up -d --no-deps --build"
 
-$COMPOSE_CMD $COMPOSE_ARGS_PULL $@
-$COMPOSE_CMD $COMPOSE_ARGS_BUILD $@
+docker compose $COMPOSE_ARGS_PULL $@
+docker compose $COMPOSE_ARGS_BUILD $@
 
 cd ~-

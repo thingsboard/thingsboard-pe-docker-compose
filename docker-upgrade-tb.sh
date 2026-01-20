@@ -49,8 +49,6 @@ set -e
 
 source compose-utils.sh
 
-COMPOSE_CMD=$(composeCmd) || exit $?
-
 DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
 
 MAIN_SERVICE_NAME=$(mainServiceName) || exit $?
@@ -84,8 +82,8 @@ COMPOSE_ARGS_RUN="\
       run --no-deps --rm -e UPGRADE_TB=true -e FROM_VERSION=${fromVersion} \
       ${MAIN_SERVICE_NAME}"
 
-$COMPOSE_CMD $COMPOSE_ARGS_PULL
-$COMPOSE_CMD $COMPOSE_ARGS_UP
-$COMPOSE_CMD $COMPOSE_ARGS_RUN
+docker compose $COMPOSE_ARGS_PULL
+docker compose $COMPOSE_ARGS_UP
+docker compose $COMPOSE_ARGS_RUN
 
 cd ~-
