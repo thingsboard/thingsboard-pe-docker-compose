@@ -46,7 +46,8 @@ services:
       - ../trendz/log:/var/log/trendz
       - ../trendz/data:/data
     depends_on:
-      - trendz-postgres
+      - postgres
+      - tb-monolith
   trendz-python-executor:
     restart: always
     image: "${DOCKER_REPO}/${TRENDZ_PYTHON_EXECUTOR_DOCKER_NAME}:${TRENDZ_VERSION}"
@@ -59,18 +60,7 @@ services:
       - ../trendz-python-executor.env
     volumes:
       - ../trendz-python-executor/conf:/python-executor-config-files
-      - ../trendz-python-executor/log:/var/log/python-executor
       - ../trendz-python-executor/data:/data
-  trendz-postgres:
-    restart: always
-    image: "postgres:16"
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_DB: trendz
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - ../trendz/postgres:/var/lib/postgresql/data
   tb-monolith:
     env_file:
       - ../tb-node.trendz.env

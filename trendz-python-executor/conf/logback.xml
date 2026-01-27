@@ -34,21 +34,6 @@
 <!DOCTYPE configuration>
 <configuration scan="true" scanPeriod="10 seconds">
 
-    <appender name="fileLogAppender"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/var/log/python-executor/${TB_SERVICE_ID}/python-executor.log</file>
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>/var/log/python-executor/${TB_SERVICE_ID}/python-executor.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>100MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-            <totalSizeCap>3GB</totalSizeCap>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -60,7 +45,6 @@
     <logger name="org.thingsboard.trendz.pythonexecutor.service.engine.PythonScriptEngine" level="INFO" />
 
     <root level="INFO">
-        <appender-ref ref="fileLogAppender"/>
         <appender-ref ref="STDOUT"/>
     </root>
 

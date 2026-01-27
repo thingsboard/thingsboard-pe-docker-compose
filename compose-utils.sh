@@ -75,6 +75,11 @@ function trendzServiceName() {
     echo $TRENDZ_SERVICE_NAME
 }
 
+function trendzDatabaseInitServiceName() {
+    TRENDZ_SERVICE_NAME="trendz-db-init"
+    echo $TRENDZ_SERVICE_NAME
+}
+
 function additionalComposeArgs() {
     source .env
     ADDITIONAL_COMPOSE_ARGS=""
@@ -200,9 +205,9 @@ function additionalStartupServices() {
     echo $ADDITIONAL_STARTUP_SERVICES
 }
 
-function additionalTrendzStartupServices() {
-    ADDITIONAL_TRENDZ_STARTUP_SERVICES="trendz-postgres"
-    echo $ADDITIONAL_TRENDZ_STARTUP_SERVICES
+function additionalComposeTrendzDatabaseInitArgs() {
+    ADDITIONAL_COMPOSE_TRENDZ_DATABASE_INIT_ARGS="-f docker-compose.trendz.db-init.yml"
+    echo $ADDITIONAL_COMPOSE_TRENDZ_DATABASE_INIT_ARGS
 }
 
 function permissionList() {
@@ -239,10 +244,7 @@ function permissionList() {
 
     if [ "$TRENDZ_ENABLED" = true ]; then
       PERMISSION_LIST="$PERMISSION_LIST
-      999  999  trendz/postgres
-
       799  799  trendz/log
-      799  799  trendz-python-executor/log
       "
     fi
 

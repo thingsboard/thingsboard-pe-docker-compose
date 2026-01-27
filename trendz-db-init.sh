@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
@@ -29,42 +30,31 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-services:
-  trendz:
-    restart: always
-    image: "${DOCKER_REPO}/${TRENDZ_DOCKER_NAME}:${TRENDZ_VERSION}"
-    ports:
-      - "8888"
-    environment:
-      TB_SERVICE_ID: trendz-application
-      SCRIPT_ENGINE_DOCKER_PROVIDER_URL: trendz-python-executor:8181
-      JAVA_OPTS: "${JAVA_OPTS}"
-    env_file:
-      - ../trendz.env
-    volumes:
-      - ../trendz/conf:/trendz-config-files
-      - ../trendz/log:/var/log/trendz
-      - ../trendz/data:/data
-    depends_on:
-      - postgres
-      - tb-monolith
-  trendz-python-executor:
-    restart: always
-    image: "${DOCKER_REPO}/${TRENDZ_PYTHON_EXECUTOR_DOCKER_NAME}:${TRENDZ_VERSION}"
-    ports:
-      - "8181"
-    environment:
-      TB_SERVICE_ID: trendz-python-executor
-      JAVA_OPTS: "${JAVA_OPTS}"
-    env_file:
-      - ../trendz-python-executor.env
-    volumes:
-      - ../trendz-python-executor/conf:/python-executor-config-files
-      - ../trendz-python-executor/log:/var/log/python-executor
-      - ../trendz-python-executor/data:/data
-  tb-monolith:
-    env_file:
-      - ../tb-node.trendz.env
-  haproxy:
-    links:
-      - trendz
+set -e
+
+URL_NO_PREFIX="${SPRING_DATASOURCE_URL#jdbc:postgresql://}"
+HOST_PORT="${URL_NO_PREFIX%%/*}"
+DB_NAME="${URL_NO_PREFIX#*/}"
+HOST="${HOST_PORT%%:*}"
+PORT="${HOST_PORT##*:}"
+PORT="${PORT:-5432}"
+
+export PGPASSWORD="${SPRING_DATASOURCE_PASSWORD}"
+
+echo "Waiting for Postgres at ${HOST}:${PORT}..."
+until pg_isready -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}"; do
+  sleep 2
+done
+
+EXISTS=$(psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres -tAc \
+  "SELECT 1 FROM pg_database WHERE datname='${DB_NAME}';" || true)
+
+if [ "${EXISTS}" = "1" ]; then
+  echo "Database '${DB_NAME}' already exists"
+else
+  echo "Creating database '${DB_NAME}'..."
+  psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres \
+    -c "CREATE DATABASE \"${DB_NAME}\";"
+fi
+
+echo "done"

@@ -30,41 +30,11 @@
 #
 
 services:
-  trendz:
-    restart: always
-    image: "${DOCKER_REPO}/${TRENDZ_DOCKER_NAME}:${TRENDZ_VERSION}"
-    ports:
-      - "8888"
-    environment:
-      TB_SERVICE_ID: trendz-application
-      SCRIPT_ENGINE_DOCKER_PROVIDER_URL: trendz-python-executor:8181
-      JAVA_OPTS: "${JAVA_OPTS}"
+  trendz-db-init:
+    image: postgres:16
     env_file:
       - ../trendz.env
     volumes:
-      - ../trendz/conf:/trendz-config-files
-      - ../trendz/log:/var/log/trendz
-      - ../trendz/data:/data
-    depends_on:
-      - postgres
-      - tb-monolith
-  trendz-python-executor:
-    restart: always
-    image: "${DOCKER_REPO}/${TRENDZ_PYTHON_EXECUTOR_DOCKER_NAME}:${TRENDZ_VERSION}"
-    ports:
-      - "8181"
-    environment:
-      TB_SERVICE_ID: trendz-python-executor
-      JAVA_OPTS: "${JAVA_OPTS}"
-    env_file:
-      - ../trendz-python-executor.env
-    volumes:
-      - ../trendz-python-executor/conf:/python-executor-config-files
-      - ../trendz-python-executor/log:/var/log/python-executor
-      - ../trendz-python-executor/data:/data
-  tb-monolith:
-    env_file:
-      - ../tb-node.trendz.env
-  haproxy:
-    links:
-      - trendz
+      - ../trendz-db-init.sh:/trendz-db-init.sh:ro
+    entrypoint: ["/bin/bash", "/trendz-db-init.sh"]
+    restart: "no"
