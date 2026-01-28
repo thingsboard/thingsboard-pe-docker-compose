@@ -18,6 +18,10 @@ tb-node/valkey-data/**
 tb-transports/*/log
 tb-integration-executor/log/
 tb-vc-executor/log/
+trendz/log/**
+trendz/data/**
+trendz/postgres/**
+trendz-python-executor/data/**
 !.env
 */.idea/**
 .idea/**

@@ -1,8 +1,7 @@
-#!/bin/bash
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2022 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2026 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -30,41 +29,46 @@
 # OR TO MANUFACTURE, USE, OR SELL ANYTHING THAT IT  MAY DESCRIBE, IN WHOLE OR IN PART.
 #
 
-set -e
-
-source compose-utils.sh
-
-COMPOSE_VERSION=$(composeVersion) || exit $?
-
-DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
-
-ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
-
-ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
-
-ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
-
-ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
-
-ADDITIONAL_COMPOSE_TRENDZ_ARGS=$(additionalComposeTrendzArgs) || exit $?
-
-cd $DEPLOYMENT_FOLDER
-
-COMPOSE_ARGS="\
-      --env-file ../.env \
-      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_MONITORING_ARGS} ${ADDITIONAL_COMPOSE_TRENDZ_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
-      stop"
-
-case $COMPOSE_VERSION in
-    V2)
-        docker compose $COMPOSE_ARGS
-    ;;
-    V1)
-        docker-compose $COMPOSE_ARGS
-    ;;
-    *)
-        # unknown option
-    ;;
-esac
-
-cd ~-
+services:
+  trendz:
+    restart: always
+    image: "${DOCKER_REPO}/${TRENDZ_DOCKER_NAME}:${TRENDZ_VERSION}"
+    ports:
+      - "8888"
+    environment:
+      TB_SERVICE_ID: trendz-application
+      SCRIPT_ENGINE_DOCKER_PROVIDER_URL: trendz-python-executor:8181
+      JAVA_OPTS: "${JAVA_OPTS}"
+    env_file:
+      - ../trendz.env
+    volumes:
+      - ../trendz/conf:/trendz-config-files
+      - ../trendz/log:/var/log/trendz
+      - ../trendz/data:/data
+    depends_on:
+      - postgres
+      - trendz-python-executor
+      - tb-core1
+      - tb-core2
+  trendz-python-executor:
+    restart: always
+    image: "${DOCKER_REPO}/${TRENDZ_PYTHON_EXECUTOR_DOCKER_NAME}:${TRENDZ_VERSION}"
+    ports:
+      - "8181"
+    environment:
+      TB_SERVICE_ID: trendz-python-executor
+      JAVA_OPTS: "${JAVA_OPTS}"
+    env_file:
+      - ../trendz-python-executor.env
+    volumes:
+      - ../trendz-python-executor/conf:/python-executor-config-files
+      - ../trendz-python-executor/data:/data
+  tb-core1:
+    env_file:
+      - ../tb-node.trendz.env
+  tb-core2:
+    env_file:
+      - ../tb-node.trendz.env
+  haproxy:
+    links:
+      - trendz
