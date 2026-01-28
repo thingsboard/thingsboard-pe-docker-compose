@@ -61,7 +61,6 @@ services:
       - ../trendz-python-executor.env
     volumes:
       - ../trendz-python-executor/conf:/python-executor-config-files
-      - ../trendz-python-executor/log:/var/log/python-executor
       - ../trendz-python-executor/data:/data
   tb-core1:
     env_file:

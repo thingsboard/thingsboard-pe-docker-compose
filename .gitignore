@@ -21,7 +21,6 @@ tb-vc-executor/log/
 trendz/log/**
 trendz/data/**
 trendz/postgres/**
-trendz-python-executor/log/**
 trendz-python-executor/data/**
 !.env
 */.idea/**
