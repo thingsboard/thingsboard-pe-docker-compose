@@ -47,6 +47,7 @@ services:
       - ../trendz/data:/data
     depends_on:
       - postgres
+      - trendz-python-executor
       - tb-core1
       - tb-core2
   trendz-python-executor:
