@@ -323,8 +323,8 @@ function checkFolders() {
   return $EXIT_CODE
 }
 
-function checkComposeVersion()
-{    # Check Docker CLI availability
+function checkComposeVersion(){
+    # Check Docker CLI availability
     if ! command -v docker >/dev/null 2>&1; then
         echo "Docker is not installed or not available in PATH. Please install Docker." >&2
         return 1
@@ -338,11 +338,17 @@ function checkComposeVersion()
     return 0
 }
 
-# Initialize Compose command on sourcing this file
-# If the script is sourced, BASH_SOURCE[0] != $0 and we can safely `return` on failure
+# Initialize Compose command on sourcing/executing this file
+# Respect TB_SKIP_COMPOSE_CHECK=true to disable the check for helper scripts
 if [ "${BASH_SOURCE[0]}" != "$0" ]; then
-  checkComposeVersion || return $?
+  # Sourced: return on failure
+  if [ "${TB_SKIP_COMPOSE_CHECK}" != "true" ]; then
+    checkComposeVersion || return $?
+  fi
 else
-  # If executed directly, run the check and exit on failure
-  checkComposeVersion || exit $?
+  # Executed directly: exit on failure
+  if [ "${TB_SKIP_COMPOSE_CHECK}" != "true" ]; then
+    checkComposeVersion || exit $?
+  fi
 fi
+
