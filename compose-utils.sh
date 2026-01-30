@@ -323,7 +323,7 @@ function checkFolders() {
   return $EXIT_CODE
 }
 
-function checkComposeVersion(){
+function checkComposeVersion() {
     # Check Docker CLI availability
     if ! command -v docker >/dev/null 2>&1; then
         echo "Docker is not installed or not available in PATH. Please install Docker." >&2
