@@ -33,14 +33,8 @@ services:
   trendz:
     volumes:
       - trendz-log-volume:/var/log/trendz
-  trendz-python-executor:
-    volumes:
-      - trendz-python-executor-log-volume:/var/log/python-executor
 
 volumes:
   trendz-log-volume:
     external:
       name: ${TRENDZ_LOG_VOLUME}
-  trendz-python-executor-log-volume:
-    external:
-      name: ${TRENDZ_PYTHON_EXECUTOR_LOG_VOLUME}
