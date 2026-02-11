@@ -76,8 +76,8 @@ function trendzServiceName() {
 }
 
 function trendzDatabaseInitServiceName() {
-    TRENDZ_SERVICE_NAME="trendz-db-init"
-    echo $TRENDZ_SERVICE_NAME
+    TRENDZ_DB_INIT_SERVICE_NAME="trendz-db-init"
+    echo TRENDZ_DB_INIT_SERVICE_NAME
 }
 
 function additionalComposeArgs() {
@@ -245,6 +245,8 @@ function permissionList() {
     if [ "$TRENDZ_ENABLED" = true ]; then
       PERMISSION_LIST="$PERMISSION_LIST
       799  799  trendz/log
+      799  799  trendz/data
+      799  799  trendz-python-executor/data
       "
     fi
 
