@@ -2,7 +2,7 @@
 #
 # ThingsBoard, Inc. ("COMPANY") CONFIDENTIAL
 #
-# Copyright © 2016-2022 ThingsBoard, Inc. All Rights Reserved.
+# Copyright © 2016-2026 ThingsBoard, Inc. All Rights Reserved.
 #
 # NOTICE: All information contained herein is, and remains
 # the property of ThingsBoard, Inc. and its suppliers,
@@ -32,39 +32,29 @@
 
 set -e
 
-source compose-utils.sh
+URL_NO_PREFIX="${SPRING_DATASOURCE_URL#jdbc:postgresql://}"
+HOST_PORT="${URL_NO_PREFIX%%/*}"
+DB_NAME="${URL_NO_PREFIX#*/}"
+HOST="${HOST_PORT%%:*}"
+PORT="${HOST_PORT##*:}"
+PORT="${PORT:-5432}"
 
-COMPOSE_VERSION=$(composeVersion) || exit $?
+export PGPASSWORD="${SPRING_DATASOURCE_PASSWORD}"
 
-DEPLOYMENT_FOLDER=$(deploymentFolder) || exit $?
+echo "Waiting for Postgres at ${HOST}:${PORT}..."
+until pg_isready -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}"; do
+  sleep 2
+done
 
-ADDITIONAL_COMPOSE_QUEUE_ARGS=$(additionalComposeQueueArgs) || exit $?
+EXISTS=$(psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres -tAc \
+  "SELECT 1 FROM pg_database WHERE datname='${DB_NAME}';" || true)
 
-ADDITIONAL_COMPOSE_ARGS=$(additionalComposeArgs) || exit $?
+if [ "${EXISTS}" = "1" ]; then
+  echo "Database '${DB_NAME}' already exists"
+else
+  echo "Creating database '${DB_NAME}'..."
+  psql -h "${HOST}" -p "${PORT}" -U "${SPRING_DATASOURCE_USERNAME}" -d postgres \
+    -c "CREATE DATABASE \"${DB_NAME}\";"
+fi
 
-ADDITIONAL_CACHE_ARGS=$(additionalComposeCacheArgs) || exit $?
-
-ADDITIONAL_COMPOSE_MONITORING_ARGS=$(additionalComposeMonitoringArgs) || exit $?
-
-ADDITIONAL_COMPOSE_TRENDZ_ARGS=$(additionalComposeTrendzArgs) || exit $?
-
-cd $DEPLOYMENT_FOLDER
-
-COMPOSE_ARGS="\
-      --env-file ../.env \
-      -f docker-compose.yml ${ADDITIONAL_CACHE_ARGS} ${ADDITIONAL_COMPOSE_ARGS} ${ADDITIONAL_COMPOSE_QUEUE_ARGS} ${ADDITIONAL_COMPOSE_MONITORING_ARGS} ${ADDITIONAL_COMPOSE_TRENDZ_ARGS} ${ADDITIONAL_COMPOSE_EDQS_ARGS} \
-      stop"
-
-case $COMPOSE_VERSION in
-    V2)
-        docker compose $COMPOSE_ARGS
-    ;;
-    V1)
-        docker-compose $COMPOSE_ARGS
-    ;;
-    *)
-        # unknown option
-    ;;
-esac
-
-cd ~-
+echo "done"
