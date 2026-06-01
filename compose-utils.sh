@@ -85,7 +85,12 @@ function additionalComposeArgs() {
     ADDITIONAL_COMPOSE_ARGS=""
     case $DATABASE in
         postgres)
-        ADDITIONAL_COMPOSE_ARGS="-f docker-compose.postgres.yml"
+        if [ "$CITUS_ENABLED" = true ] && [ "$TB_SETUP" = advanced ]; then
+          # Citus replaces the single postgres service (see additionalComposeCitusArgs).
+          ADDITIONAL_COMPOSE_ARGS=""
+        else
+          ADDITIONAL_COMPOSE_ARGS="-f docker-compose.postgres.yml"
+        fi
         ;;
         hybrid)
         ADDITIONAL_COMPOSE_ARGS="-f docker-compose.hybrid.yml"
@@ -159,6 +164,18 @@ function additionalComposeEdqsArgs() {
     fi
 }
 
+function additionalComposeCitusArgs() {
+    source .env
+
+    if [ "$CITUS_ENABLED" = true ] && [ "$TB_SETUP" = advanced ] && [ "$DATABASE" = postgres ]
+    then
+      ADDITIONAL_COMPOSE_CITUS_ARGS="-f docker-compose.citus.yml"
+      echo $ADDITIONAL_COMPOSE_CITUS_ARGS
+    else
+      echo ""
+    fi
+}
+
 function additionalComposeTrendzArgs() {
     source .env
 
@@ -176,7 +193,11 @@ function additionalStartupServices() {
     ADDITIONAL_STARTUP_SERVICES=""
     case $DATABASE in
         postgres)
-        ADDITIONAL_STARTUP_SERVICES="$ADDITIONAL_STARTUP_SERVICES postgres"
+        if [ "$CITUS_ENABLED" = true ] && [ "$TB_SETUP" = advanced ]; then
+          ADDITIONAL_STARTUP_SERVICES="$ADDITIONAL_STARTUP_SERVICES citus-coordinator citus-worker-1 citus-worker-2 citus-manager"
+        else
+          ADDITIONAL_STARTUP_SERVICES="$ADDITIONAL_STARTUP_SERVICES postgres"
+        fi
         ;;
         hybrid)
         ADDITIONAL_STARTUP_SERVICES="$ADDITIONAL_STARTUP_SERVICES postgres cassandra"
@@ -233,6 +254,14 @@ function permissionList() {
     if [ "$DATABASE" = "hybrid" ]; then
       PERMISSION_LIST="$PERMISSION_LIST
       999  999  tb-node/cassandra
+      "
+    fi
+
+    if [ "$CITUS_ENABLED" = true ] && [ "$TB_SETUP" = advanced ] && [ "$DATABASE" = "postgres" ]; then
+      PERMISSION_LIST="$PERMISSION_LIST
+      999  999  tb-node/citus/coordinator
+      999  999  tb-node/citus/worker-1
+      999  999  tb-node/citus/worker-2
       "
     fi
 
