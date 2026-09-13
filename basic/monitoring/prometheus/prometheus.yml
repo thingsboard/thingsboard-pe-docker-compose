@@ -51,6 +51,10 @@ scrape_configs:
     static_configs:
      - targets: ['localhost:9090']
 
+  - job_name: 'kafka-exporter'
+    static_configs:
+      - targets: [ 'kafka-exporter:9308' ]
+
   - job_name: 'tb-monolith'
     metrics_path: /actuator/prometheus
     static_configs:
