@@ -31,6 +31,7 @@
 #
 
 set -e
+export TB_SKIP_COMPOSE_CHECK=true
 source compose-utils.sh
 if checkFolders "$@" ; then
     echo "------"
